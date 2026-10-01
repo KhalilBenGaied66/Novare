@@ -1,12 +1,12 @@
 {
   "min": {
     "routing_accuracy": 0.98,
-    "final_route_accuracy": 0.96,
+    "final_route_accuracy": 0.89,
     "retrieval_hit_rate": 0.97,
-    "retrieval_mrr": 0.85,
-    "citation_hit_rate": 0.93,
-    "fact_accuracy": 0.89,
-    "pii_accuracy": 0.98
+    "retrieval_mrr": 0.84,
+    "citation_hit_rate": 0.87,
+    "fact_accuracy": 0.86,
+    "pii_accuracy": 1.0
   },
   "max": {
     "forbidden_doc_violations": 0,

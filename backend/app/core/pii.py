@@ -22,14 +22,15 @@ _SPACES = " \u00a0\u202f"
 _EMAIL = re.compile(r"[\w.+%-]+@[\w-]+(?:\.[\w-]+)+")
 
 # National (0X XX XX XX XX) or international (+33 / 0033, optional "(0)") prefix, then
-# four pairs of digits. The separator between pairs must be the same throughout, which
-# keeps "01.02.2026 10" (a date followed by a number) from looking like a phone number.
+# eight digits: either four pairs with the same separator throughout, which keeps
+# "01.02.2026 10" (a date followed by a number) from looking like a phone number, or
+# any grouping with spaces only ("06 12 345 678"), spaces never being date separators.
 # First digit 1-7 or 9: 08 numbers are service numbers, not personal data.
 _TEL = re.compile(
     rf"(?<![\w+])"
     rf"(?:(?:\+|00[{_SPACES}]?)33[{_SPACES}.-]?(?:\(0\)|0)?[{_SPACES}.-]?|0)"
     rf"[1-79]"
-    rf"(?P<sep>[{_SPACES}.-]?)[0-9]{{2}}(?:(?P=sep)[0-9]{{2}}){{3}}"
+    rf"(?:(?P<sep>[{_SPACES}.-]?)[0-9]{{2}}(?:(?P=sep)[0-9]{{2}}){{3}}|(?:[{_SPACES}]?[0-9]){{8}})"
     rf"(?![0-9])"
 )
 

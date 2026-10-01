@@ -7,6 +7,8 @@ __pycache__/
 
 # Local configuration and secrets
 .env
+.env.*
+!.env.example
 
 # Private working notes: never published
 _private/
@@ -15,10 +17,8 @@ _private/
 data/index/
 data/models/
 data/*.db
+data/*.db-*
 evals/candidates.json
-evals/reports/*
-!evals/reports/latest.md
-!evals/reports/latest.json
 
 # Tools
 .streamlit/

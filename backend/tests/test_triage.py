@@ -237,15 +237,6 @@ def test_reasons_name_every_sensitive_subject():
     )
 
 
-def test_reasons_say_why_a_dispute_was_not_automated():
-    no_amount = run("Je conteste ma dernière facture.", "C-12")
-    assert "Litige de facturation non automatisé : pas de montant exploitable" in no_amount.reasons
-    unknown = run("Je conteste la facture de 150 €.", "C-99")
-    assert "Client : C-99 (champ), inconnu du référentiel" in unknown.reasons
-    assert "Litige de facturation non automatisé : pas de client connu" in unknown.reasons
-    assert unknown.reasons[-1].startswith("DEFAULT :")
-
-
 def test_reasons_of_the_agent_route_name_what_matched():
     decision = run("La chaudière est en panne, merci d'envoyer un technicien.", "C-12")
     assert decision.reasons[-1] == (

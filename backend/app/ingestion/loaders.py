@@ -112,13 +112,15 @@ def _split_front_matter(text: str) -> tuple[dict, str]:
 def _load_pdf(path: Path) -> tuple[dict, list[Page]]:
     # Imported here: pypdf takes about a second to import and most runs have no PDF to read.
     import pypdf
-    from pypdf.errors import PyPdfError
 
     try:
         reader = pypdf.PdfReader(str(path))
         texts = [page.extract_text() or "" for page in reader.pages]
         title = reader.metadata.title if reader.metadata else None
-    except PyPdfError as exc:
+    except Exception as exc:  # parsing boundary
+        # pypdf also raises outside its own exception hierarchy (an AES-encrypted file
+        # needs a package that is not installed): any failure means "unreadable", and
+        # the ingestion skips the file instead of stopping.
         raise ValueError(f"unreadable PDF: {type(exc).__name__}") from exc
     pages = [
         Page(number, text.strip()) for number, text in enumerate(texts, start=1) if text.strip()

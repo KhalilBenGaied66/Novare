@@ -159,7 +159,12 @@ def get_retriever() -> Retriever:
 def _usable_vector_store(manifest: dict) -> vector_store.VectorStore | None:
     """Return the vector store when the index on disk matches the current settings."""
     settings = get_settings()
-    if settings.retrieval_mode != "hybrid" or manifest.get("retrieval_mode") != "hybrid":
+    if settings.retrieval_mode != "hybrid":
+        return None
+    if manifest.get("retrieval_mode") != "hybrid":
+        # Built without vectors (embedding model unavailable, or RETRIEVAL_MODE=bm25
+        # at ingestion time): lexical search only until the corpus is ingested again.
+        logger.warning("index_without_vectors", extra={"index": manifest.get("retrieval_mode")})
         return None
     try:
         store = vector_store.get_vector_store()

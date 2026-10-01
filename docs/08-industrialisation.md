@@ -36,7 +36,7 @@ l'usage réel.
 | Vecteurs | Fichier local testé ; Qdrant écrit, testé en mémoire seulement | Serveur ou service géré, index sur le champ client |
 | Montée en charge | Un processus, traitement synchrone | File de tâches pour l'agent, limite de débit partagée |
 | Observabilité | Journaux JSON, indicateurs agrégés | Traces des appels LLM, tableaux de bord, alertes |
-| CI | Écrite (tests, évaluation, images), jamais exécutée | Premier passage sur le dépôt |
+| CI | Tests et évaluation à chaque push ; job Docker à lancer à la main, jamais exécuté | Lancer le job Docker, corriger ce qu'il révèle |
 
 ## Intégrations
 
@@ -46,7 +46,9 @@ réelle :
 - les documents viennent d'une GED ou d'un intranet, avec leurs droits d'accès ;
 - les contrats et les clients viennent du système de gestion, pas d'un fichier JSON ;
 - les tickets sont créés dans l'outil de tickets existant ;
-- les demandes arrivent d'une boîte de réception ou d'un portail.
+- les demandes arrivent d'une boîte de réception ou d'un portail ;
+- les demandes transmises (`human`) ne sont aujourd'hui remises à personne : il faut une
+  file de traitement ou un envoi vers l'outil de tickets.
 
 Les points de branchement sont isolés : `ingestion/loaders.py` pour les documents,
 `domain/clients.py` pour le référentiel, `db/repositories.py` pour les tickets,
@@ -58,12 +60,14 @@ Les points de branchement sont isolés : `ingestion/loaders.py` pour les documen
   le repli ou devient un simple mode dégradé.
 - Reclassement des passages (reranking) si la base documentaire grandit.
 - Découpage adapté au modèle d'embeddings (il ne lit qu'environ 450 caractères).
-- Jours fériés et fuseaux horaires dans le calcul des échéances.
+- Jours fériés dans le calcul des échéances.
+- Tri : un modèle en second avis, qui ne pourrait qu'ajouter une transmission, pour les
+  sujets sensibles et les pannes dits avec d'autres mots que ceux des règles.
 
 ## Ordre proposé
 
 1. Essai métier sur données réelles anonymisées, avec un modèle activé.
 2. Authentification et rattachement du client.
-3. Exécution de la CI et des images ; PostgreSQL et migrations.
+3. Exécution des images (job Docker de la CI) ; PostgreSQL et migrations.
 4. Intégration à l'outil de tickets, en lecture puis en écriture.
 5. Conformité (analyse d'impact, conservation) avant toute ouverture à des clients.

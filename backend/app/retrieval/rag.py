@@ -68,12 +68,13 @@ class _Passage:
 def answer_with_rag(req: AskRequest, decision: TriageDecision, ctx: RequestContext) -> AskResponse:
     """Answer `ctx.q_masked` from the corpus; escalate when the sources do not support it.
 
-    A client-scoped document is searched only for a client that exists in the reference
-    data. `IndexNotReady` is not handled here: the API turns it into a 503.
+    A client-scoped document is searched only for a known client given in the request's
+    client field (`TriageDecision.scoped_client_id`). `IndexNotReady` is not handled
+    here: the API turns it into a 503.
     """
     settings = get_settings()
     retriever = hybrid.get_retriever()
-    client_id = decision.client_id if decision.client_known else None
+    client_id = decision.scoped_client_id
     # Masking tags are not search terms: the question is searched without them.
     query = pii.strip_tags(ctx.q_masked)
     results = retriever.search(query, client_id=client_id)
@@ -113,6 +114,9 @@ def answer_with_rag(req: AskRequest, decision: TriageDecision, ctx: RequestConte
             # The handler could not check an answer that cites none of the sources.
             ctx.log("Génération : réponse du modèle sans citation valide, escalade")
             return respond("human", "llm", _NOT_ANSWERABLE, [])
+        unknown = [ref for ref in guardrails.extract_refs(generated) if ref not in refs]
+        if unknown:
+            ctx.log(f"Génération : référence(s) à des sources inexistantes {unknown}, à vérifier")
         ctx.log(f"Génération : réponse du modèle, {len(refs)} source(s) citée(s)")
         return respond("rag", "llm", generated, refs)
 
@@ -129,11 +133,12 @@ def _generate(ctx: RequestContext, results: list[RetrievedChunk]) -> str | None:
     """Text written by the model, or None when the call failed (extractive fallback)."""
     settings = get_settings()
     sources = guardrails.format_sources(results)
+    question = guardrails.neutralize_tags(ctx.q_masked)
     messages = [
         {"role": "system", "content": loader.load("system_rag")},
         {
             "role": "user",
-            "content": f"<sources>\n{sources}\n</sources>\n<demande>\n{ctx.q_masked}\n</demande>",
+            "content": f"<sources>\n{sources}\n</sources>\n<demande>\n{question}\n</demande>",
         },
     ]
     try:
@@ -143,7 +148,10 @@ def _generate(ctx: RequestContext, results: list[RetrievedChunk]) -> str | None:
         logger.warning("rag_llm_fallback", extra={"error": type(exc).__name__})
         ctx.log(f"Génération : modèle indisponible ({type(exc).__name__}), repli extractif")
         return None
-    ctx.add_llm(result)
+    ctx.add_llm(result)  # a truncated answer was paid for too
+    if result.finish_reason == "length":
+        ctx.log("Génération : réponse du modèle tronquée (limite de tokens), repli extractif")
+        return None
     if ctx.usage.cost_eur > settings.max_cost_eur_per_request:
         ctx.log(
             f"RG-08 : coût de la requête ({ctx.usage.cost_eur:.4f} €) supérieur au budget "
@@ -189,7 +197,7 @@ def _best_passages(query: str, results: list[RetrievedChunk]) -> list[_Passage]:
 def _in_headings(query_tokens: set[str], heading_tokens: frozenset[str]) -> int:
     """Number of query tokens found in a title or heading.
 
-    A title names its subject with another word of the same family than the question
+    A title names its subject with another word of the same family as the question's
     ("Grille tarifaire" for "tarifs"), which the stemmer does not always reduce to one
     stem: here a token also matches when it starts the other one or the reverse, from
     five letters up.

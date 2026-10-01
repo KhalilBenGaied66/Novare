@@ -56,8 +56,9 @@ le client auquel il appartient.
 3. **fusion** des deux classements par rangs réciproques (RRF) ; les 4 meilleurs
    passages sont retenus.
 
-Les passages d'un contrat sont exclus des deux recherches pour toute demande qui ne
-vient pas du client concerné.
+Les passages d'un contrat sont exclus des deux recherches pour toute demande dont le
+champ client ne désigne pas le client concerné. Un identifiant écrit dans le texte ne
+suffit pas (voir [06-securite-rgpd.md](06-securite-rgpd.md)).
 
 Deux stockages de vecteurs existent derrière la même interface : un fichier NumPy
 (par défaut, sans infrastructure) et un serveur Qdrant (si `QDRANT_URL` est renseigné).
@@ -69,8 +70,8 @@ BM25 seul et l'ingestion le signale.
 - **Confiance.** Part des termes de la question retrouvés dans les passages, combinée à
   la meilleure similarité vectorielle. Sous 0,35, la demande est transmise.
 - **Avec un modèle.** Il reçoit la question masquée et les passages numérotés, et doit
-  citer `[n]` ou répondre `INSUFFISANT`. Une réponse sans citation valide n'est pas
-  renvoyée.
+  citer `[n]` ou répondre `INSUFFISANT`. Une réponse sans citation valide, ou coupée à
+  la limite de tokens, n'est pas renvoyée.
 - **Sans modèle.** Les phrases, éléments de liste et lignes de tableau des passages sont
   notés par recoupement de termes avec la question ; les un à trois meilleurs sont cités
   tels quels. Un passage doit partager au moins deux termes avec la question (en comptant
@@ -91,16 +92,22 @@ bout de `AGENT_MAX_STEPS` tours.
 | `propose_ticket(subject, summary, priority)` | Enregistre une proposition ; ne crée rien |
 
 Aucun outil ne prend d'identifiant client : ils agissent tous sur le client du dossier,
-fixé par le tri. Un modèle ne peut donc pas être amené à lire le contrat d'un autre
-client.
+c'est-à-dire celui du champ client de la demande. Un modèle ne peut donc pas être amené
+à lire le contrat d'un autre client. Si le client n'est cité que dans le texte, le
+dossier est traité comme celui d'un client à confirmer, sans lecture de contrat.
 
 Deux planificateurs partagent la boucle et les outils : un modèle (appels d'outils au
 format OpenAI via LiteLLM), et un plan fixe sans modèle utilisé quand aucune clé n'est
 configurée ou quand le modèle échoue.
 
 La proposition de ticket est enregistrée en base (`actions`). `POST
-/api/v1/actions/{id}/approve` crée le ticket ; la prise de décision est une mise à jour
-conditionnelle, de sorte que deux approbations simultanées ne créent qu'un ticket.
+/api/v1/actions/{id}/approve` crée le ticket, avec la priorité proposée ou celle que le
+valideur indique à la place ; la prise de décision est une mise à jour conditionnelle,
+de sorte que deux approbations simultanées ne créent qu'un ticket.
+
+Sans modèle, la priorité proposée vient de quelques indices (urgence, sécurité, arrêt
+total) : P1 s'ils sont présents, P2 sinon. C'est une estimation à confirmer, pas une
+qualification.
 
 ## Modèles
 

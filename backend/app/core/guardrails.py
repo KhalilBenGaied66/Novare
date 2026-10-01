@@ -42,6 +42,18 @@ def retrieval_confidence(query: str, results: list[RetrievedChunk]) -> float:
     return _COVERAGE_WEIGHT * coverage + (1 - _COVERAGE_WEIGHT) * dense
 
 
+_PROMPT_TAGS = re.compile(r"</?\s*(?:demande|sources)\b[^>]*>", re.IGNORECASE)
+
+
+def neutralize_tags(text: str) -> str:
+    """Remove the tags that delimit the request and the sources in the prompts.
+
+    Without this, a request could close its own <demande> block and open a forged
+    <sources> block. Applied to the copy sent to a model only, not to what is stored.
+    """
+    return _PROMPT_TAGS.sub(" ", text)
+
+
 def format_sources(results: list[RetrievedChunk]) -> str:
     """Numbered source block for prompts; the number is the 1-based position in `results`."""
     return "\n\n".join(_format_source(n, r) for n, r in enumerate(results, start=1))
@@ -52,7 +64,7 @@ def _format_source(number: int, result: RetrievedChunk) -> str:
     header = f"[{number}] {chunk.title} — {chunk.doc}, p. {chunk.page}"
     if chunk.section:
         header += f", {chunk.section}"
-    return f"{header}\n{chunk.text.strip()}"
+    return f"{header}\n{neutralize_tags(chunk.text).strip()}"
 
 
 def extract_refs(answer: str) -> list[int]:

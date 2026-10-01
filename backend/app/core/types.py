@@ -46,6 +46,17 @@ class TriageDecision:
     client_id: str | None  # explicit field or extracted from the text
     montant: float | None  # explicit field or extracted from the text
     client_known: bool  # client_id exists in the client reference data
+    # "champ": given in the request's client field, the channel that identifies the
+    # requester. "texte": merely written in the message, which anyone can do; such a
+    # client is never given access to client-scoped documents or contract data.
+    client_origin: Literal["champ", "texte"] = "champ"
+
+    @property
+    def scoped_client_id(self) -> str | None:
+        """The client whose own documents this request may read, if any."""
+        if self.client_known and self.client_origin == "champ":
+            return self.client_id
+        return None
 
 
 @dataclass(frozen=True)
@@ -64,5 +75,6 @@ class LLMResult:
     completion_tokens: int = 0
     cost_eur: float = 0.0
     latency_ms: int = 0
+    finish_reason: str = ""  # "length" when the answer was cut at the token limit
     # Assistant message in OpenAI chat format, ready to append to the history.
     raw_message: dict = field(default_factory=dict)

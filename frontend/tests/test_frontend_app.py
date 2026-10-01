@@ -121,8 +121,8 @@ class FakeApi:
         self._record("ask", q, client_id, montant)
         return self.ask_result
 
-    def approve(self, action_id, validator) -> dict:
-        self._record("approve", action_id, validator)
+    def approve(self, action_id, validator, priority=None) -> dict:
+        self._record("approve", action_id, validator, priority)
         decided = {**PENDING_ACTION, "status": "approved", "ticket_id": "T-000042"}
         return {"action": decided, "ticket": {"ticket_id": "T-000042"}}
 
@@ -538,6 +538,18 @@ def test_pending_action_is_displayed_and_nothing_is_decided_by_default(fake_api)
     assert fake_api.args_of("reject") == []
 
 
+def test_validator_can_correct_the_priority_before_approving(fake_api):
+    app = start_with_pending_action(fake_api)
+
+    assert app.selectbox(key="priority_9f1c2ab4").value == "P1"  # the proposed priority
+    app.text_input(key="validator_9f1c2ab4").input("Marie Durand")
+    app.selectbox(key="priority_9f1c2ab4").select("P2")
+    app.button(key="approve_action").click().run()
+
+    assert not app.exception
+    assert fake_api.args_of("approve") == [("9f1c2ab4", "Marie Durand", "P2")]
+
+
 def test_approve_sends_the_validator_and_shows_the_created_ticket(fake_api):
     app = start_with_pending_action(fake_api)
 
@@ -545,7 +557,7 @@ def test_approve_sends_the_validator_and_shows_the_created_ticket(fake_api):
     app.button(key="approve_action").click().run()
 
     assert not app.exception
-    assert fake_api.args_of("approve") == [("9f1c2ab4", "Marie Durand")]
+    assert fake_api.args_of("approve") == [("9f1c2ab4", "Marie Durand", "P1")]
     assert fake_api.args_of("reject") == []
     assert [message.value for message in app.main.success] == [
         "Ticket T-000042 créé après validation."

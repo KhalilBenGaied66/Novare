@@ -42,12 +42,24 @@ def strip_accents(text: str) -> str:
 
 def normalize(text: str) -> str:
     """Lowercase, accent-free, single-spaced text for phrase matching."""
-    return re.sub(r"\s+", " ", strip_accents(text.lower())).strip()
+    composed = unicodedata.normalize("NFC", text)
+    return re.sub(r"\s+", " ", strip_accents(composed.lower())).strip()
 
 
 def words(text: str) -> list[str]:
-    """Lowercase word tokens, accents kept, no filtering."""
-    return [m.group(0).lower() for m in _WORD.finditer(text)]
+    """Lowercase word tokens, accents kept (composed form), no filtering."""
+    composed = unicodedata.normalize("NFC", text)
+    return [m.group(0).lower() for m in _WORD.finditer(composed)]
+
+
+def word_sequence(text: str) -> str:
+    """Accent-free lowercase words separated by single spaces ("droit d acces").
+
+    Punctuation, hyphens and both kinds of apostrophe disappear, so "trop-perçu" and
+    "trop perçu" give the same sequence. Used to match multi-word expressions on whole
+    words: search for " expression " in " sequence ".
+    """
+    return " ".join(words(normalize(text)))
 
 
 @lru_cache(maxsize=20_000)

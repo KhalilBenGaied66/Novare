@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,6 +12,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       # LiteLLM otherwise downloads its price table when it is first imported.
       LITELLM_LOCAL_MODEL_COST_MAP: "True"
@@ -43,10 +45,14 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: evaluation-report
-          path: evals/reports/latest.*
+          path: evals/reports/bm25.*
 
+  # Builds the images and starts the full stack (PostgreSQL, Qdrant). Started by hand
+  # from the Actions tab: it downloads the embedding model and takes several minutes.
   docker:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       POSTGRES_PASSWORD: ci-only-not-a-secret
     steps:

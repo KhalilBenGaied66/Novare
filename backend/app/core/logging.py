@@ -124,6 +124,9 @@ def setup_logging() -> None:
     uvicorn_logger = logging.getLogger("uvicorn")
     uvicorn_logger.handlers.clear()
     uvicorn_logger.propagate = True
+    error_logger = logging.getLogger("uvicorn.error")
+    error_logger.handlers.clear()
+    error_logger.propagate = True
     access_logger = logging.getLogger("uvicorn.access")
     access_logger.handlers.clear()
     access_logger.propagate = False

@@ -1,5 +1,6 @@
 """API contracts (Pydantic). Everything that crosses the HTTP boundary is defined here."""
 
+import unicodedata
 from datetime import datetime
 from typing import Literal
 
@@ -22,18 +23,29 @@ class AskRequest(BaseModel):
     client_id: str | None = Field(default=None, pattern=CLIENT_ID_PATTERN, examples=["C-12"])
     montant: float | None = Field(default=None, gt=0, le=1_000_000, description="Montant en €")
 
-    @field_validator("q")
+    @field_validator("q", mode="before")
     @classmethod
-    def _strip(cls, value: str) -> str:
-        return value.strip()
+    def _canonical_text(cls, value: object) -> object:
+        """One form of the text for triage, masking and search.
+
+        Accents are composed (a decomposed "é" would not match the vocabulary of the
+        rules) and invisible format or control characters are removed, line breaks and
+        tabs excepted. Runs before the length check, which then applies to real text.
+        """
+        if not isinstance(value, str):
+            return value  # left to the type validation
+        composed = unicodedata.normalize("NFC", value)
+        visible = "".join(
+            ch for ch in composed if ch in "\n\t" or unicodedata.category(ch) not in ("Cf", "Cc")
+        )
+        return visible.strip()
 
     @field_validator("client_id", mode="before")
     @classmethod
-    def _normalise_client(cls, value: str | None) -> str | None:
-        if value is None:
-            return None
-        value = value.strip().upper()
-        return value or None
+    def _normalise_client(cls, value: object) -> object:
+        if not isinstance(value, str):
+            return value  # None, or a wrong type left to the type validation
+        return value.strip().upper() or None
 
 
 class Citation(BaseModel):
@@ -97,6 +109,8 @@ class Ticket(BaseModel):
 class ActionDecision(BaseModel):
     validator: str = Field(min_length=1, max_length=80, description="Who approves or rejects")
     reason: str = Field(default="", max_length=500)
+    # On approval only: the priority the validator sets in place of the proposed one.
+    priority: Literal["P1", "P2", "P3"] | None = None
 
 
 class ActionResult(BaseModel):

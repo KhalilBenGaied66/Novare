@@ -52,8 +52,9 @@ n'a été validée avec des utilisateurs.
 Un cadrage réel devrait trancher ces points avec les équipes concernées :
 
 - Quels sujets exactement doivent toujours revenir à une personne ?
-- Le seuil de 500 € pour les litiges traités automatiquement est-il le bon, et qui le
-  fixe ?
+- Le seuil de 500 € pour les litiges traités automatiquement est une hypothèse : quel
+  est le bon, et qui le fixe ?
+- À qui, et par quel canal, une demande transmise est-elle remise ?
 - Qui valide les tickets proposés, et dans quel délai ?
 - Où vivent réellement les documents et les contrats (GED, ERP, outil de tickets) ?
 - Combien de temps conserve-t-on les demandes, et sous quelle forme ?

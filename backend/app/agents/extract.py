@@ -1,25 +1,24 @@
-"""Client identifiers and euro amounts: read from free text, written in French notation."""
+"""Client identifiers and euro amounts read from free text."""
 
 import re
 
 _CLIENT_ID = re.compile(r"\bC-\d{1,6}\b", re.IGNORECASE)
 
-# Space, no-break space and narrow no-break space: all three are used as thousands
-# separators in French text.
-_SPACES = "   "
-
 # A number followed by a currency mark: "120 €", "120€", "1 250,50 €", "1.250,50 euros",
 # "300 EUR".
 # - The number must not start inside a word, a number or a hyphenated reference, so
 #   that "C-12" or "F-2026-0412" never gives the first digits of an amount.
-# - Integer part: groups of three digits separated by a space or a dot, or plain digits.
+# - Integer part: groups of three digits separated by a dot, an apostrophe or any
+#   whitespace (plain, no-break or thin space, tab, line break), or plain digits. Being
+#   generous with separators errs towards the larger amount: "1  250 €" must be read as
+#   1250 €, which a person handles, never as 250 €, which a rule would automate.
 # - Decimals: comma or dot followed by one or two digits ("1.250" is one thousand two
 #   hundred and fifty, "1.25" is one and a quarter).
 _AMOUNT = re.compile(
-    rf"(?<![\w.,-])"
-    rf"(?P<integer>\d{{1,3}}(?:[{_SPACES}.]\d{{3}})+|\d+)"
-    rf"(?:[.,](?P<decimals>\d{{1,2}}))?"
-    rf"[{_SPACES}]?(?:€|euros?\b|eur\b)",
+    r"(?<![\w.,-])"
+    r"(?P<integer>\d{1,3}(?:(?:[\s'’]+|\.)\d{3})+|\d+)"
+    r"(?:[.,](?P<decimals>\d{1,2}))?"
+    r"\s*(?:€|euros?\b|eur\b)",
     re.IGNORECASE,
 )
 _NOT_A_DIGIT = re.compile(r"\D")
@@ -36,6 +35,7 @@ def extract_amounts(text: str) -> list[float]:
 
     A number without a currency mark (a duration, a percentage, an invoice number) is
     not an amount. Duplicates are kept: the caller decides what several amounts mean.
+    A quantity is not multiplied: "2 factures de 300 €" is 300 €.
     """
     amounts = []
     for match in _AMOUNT.finditer(text):
@@ -46,5 +46,5 @@ def extract_amounts(text: str) -> list[float]:
 
 
 def format_amount(amount: float) -> str:
-    """Amount in French notation for user-facing text: 1250.5 -> "1250,50 €"."""
+    """Amount for user-facing text, with a decimal comma: 1250.5 -> "1250,50 €"."""
     return f"{amount:.2f}".replace(".", ",") + " €"

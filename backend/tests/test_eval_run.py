@@ -182,8 +182,8 @@ def test_reports_are_written_in_json_and_markdown(golden, env):
 
     run_eval.run_eval()
 
-    written = json.loads((env.evals_dir / "reports" / "latest.json").read_text(encoding="utf-8"))
-    markdown = (env.evals_dir / "reports" / "latest.md").read_text(encoding="utf-8")
+    written = json.loads((env.evals_dir / "reports" / "hybrid.json").read_text(encoding="utf-8"))
+    markdown = (env.evals_dir / "reports" / "hybrid.md").read_text(encoding="utf-8")
     assert written["metrics"]["all"]["cases"] == 5
     assert "| Routage (triage) | 1.0 | 1.0 | 1.0 |" in markdown
     assert "aucun LLM" in markdown

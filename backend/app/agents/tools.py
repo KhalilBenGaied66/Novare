@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from app.core import pii
+from app.core import guardrails, pii
 from app.core.logging import get_logger
 from app.core.types import RetrievedChunk
 from app.domain import clients, sla
@@ -194,7 +194,7 @@ def _format_source(number: int, result: RetrievedChunk) -> str:
     header = f"[{number}] {chunk.title} — {chunk.doc}, p. {chunk.page}"
     if chunk.section:
         header += f", {chunk.section}"
-    return f"{header}\n{chunk.text.strip()}"
+    return f"{header}\n{guardrails.neutralize_tags(chunk.text).strip()}"
 
 
 def _get_contract(tc: ToolContext) -> str:
@@ -256,9 +256,10 @@ def _compute_deadline(tc: ToolContext, priority: str) -> str:
 def _propose_ticket(tc: ToolContext, subject: str, summary: str, priority: str) -> str:
     replaced = tc.proposal is not None
     # The subject is a one-line label: line breaks and repeated spaces are collapsed.
+    # Masked again here: this text may have been written by a model, and it is stored.
     tc.proposal = {
-        "subject": " ".join(subject.split()),
-        "summary": summary.strip(),
+        "subject": pii.redact(" ".join(subject.split()))[0],
+        "summary": pii.redact(summary.strip())[0],
         "priority": priority,
     }
     note = " (remplace la proposition précédente)" if replaced else ""

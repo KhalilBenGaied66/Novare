@@ -13,20 +13,26 @@ nommée, et se tester sans réseau.
 **Écarté.** Un classifieur LLM : non déterministe, payant à chaque demande, et son
 erreur la plus grave (automatiser une demande sensible) ne se constate qu'après coup.
 
-**Coût.** Les règles ne reconnaissent que le vocabulaire prévu. Une formulation
-inattendue d'un sujet sensible passe en question documentaire ; elle reste soumise à
-relecture, mais n'est pas signalée comme sensible.
+**Coût.** Les règles lisent du vocabulaire, pas une intention. Une formulation
+inattendue d'un sujet sensible passe en question documentaire, ou en litige automatisé
+si elle conteste aussi une petite facture en toutes lettres ; une panne décrite avec
+d'autres mots n'est pas confiée à l'agent. Le jeu d'évaluation contient de tels cas, qui
+échouent. Une piste, non réalisée : un modèle en second avis qui ne pourrait
+qu'ajouter une transmission, jamais automatiser.
 
 ## D2. Les petits litiges sont traités par une règle
 
 **Choix.** Litige inférieur à 500 € d'un client connu : ticket standard, sans modèle
 ni recherche documentaire.
 
-**Pourquoi.** La décision ne dépend que de trois faits vérifiables. Un modèle
-n'apporterait qu'un coût et une source d'erreur.
+**Pourquoi.** La décision ne dépend que de faits vérifiables : une contestation dite en
+toutes lettres, un montant, un client connu. Un modèle n'apporterait qu'un coût et une
+source d'erreur.
 
-**Coût.** Le montant doit être lisible (champ ou texte sans ambiguïté). Deux montants
-différents dans le texte bloquent l'automatisation.
+**Coût.** Le montant doit être lisible (champ ou texte sans ambiguïté) et la
+contestation explicite. Deux montants différents dans le texte, une panne signalée dans
+la même demande ou une simple mention de facture bloquent l'automatisation. C'est la
+seule action sans validation humaine, et le client n'y est pas authentifié.
 
 ## D3. Sans modèle, le système cite ; il n'invente pas
 
@@ -56,8 +62,8 @@ aucun document à un tiers.
 
 **Coût.** Le modèle lit environ 450 caractères par passage : la fin des passages les
 plus longs n'est vue que par BM25. Sur le jeu d'évaluation, l'apport des vecteurs se
-voit sur le rang du bon document (MRR 0,93 contre 0,88), pas sur les réponses en mode
-extraits.
+voit sur le rang du bon document (MRR 0,89 contre 0,86) et sur un document que BM25
+manque, peu sur les réponses en mode extraits.
 
 ## D5. Deux stockages de vecteurs derrière une interface
 
@@ -93,10 +99,11 @@ peu lié à la question, erreur interne : la demande va à un gestionnaire.
 **Pourquoi.** Une réponse fausse sur un délai ou un tarif coûte plus cher qu'une
 réponse tardive.
 
-**Coût, mesuré.** La règle « au moins deux termes partagés » a fait passer les questions
-hors sujet répondues à tort de 3 sur 13 à 0 sur 17 dans les essais, et fait transmettre
-trois questions du jeu de développement auxquelles le système répondait avant (dont deux
-réponses étaient fausses). Détail dans [05-evaluation.md](05-evaluation.md).
+**Coût, mesuré.** La règle « au moins deux termes partagés » fait transmettre les
+questions hors sujet qui ne partagent qu'un mot avec le corpus, et deux questions du
+périmètre auxquelles le système répondait avant (mal). Elle ne protège pas d'une
+question hors sujet qui partage deux termes du domaine : 6 des 22 questions hors
+périmètre du jeu reçoivent encore un extrait. Détail dans [05-evaluation.md](05-evaluation.md).
 
 ## D8. Plusieurs fournisseurs de modèles, un modèle par tâche
 

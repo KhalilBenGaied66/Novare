@@ -21,6 +21,7 @@ KEY_RESULT = "result"  # last AskResponse, as a dict
 KEY_SENT = "sent"  # client and amount actually sent with that request
 KEY_ACTION_OUTCOME = "action_outcome"  # ActionResult once the proposal is decided
 KEY_FEEDBACK_SENT = "feedback_sent"
+PRIORITIES = ("P1", "P2", "P3")
 KEY_VALIDATOR_NAME = "validator_name"  # last validator name, to avoid retyping it
 
 ROUTE_LABELS = {
@@ -179,14 +180,18 @@ def submit_request(q: str, client_text: str, amount_text: str) -> None:
     st.session_state[KEY_SENT] = {"client_id": client_id, "montant": montant}
 
 
-def decide_action(action_id: str, approved: bool, validator: str, reason: str) -> None:
+def decide_action(
+    action_id: str, approved: bool, validator: str, reason: str, priority: str
+) -> None:
     validator = validator.strip()
     if not validator:
         st.warning("Indiquez le nom du valideur avant de valider ou de refuser.")
         return
     try:
         if approved:
-            outcome = api_client.approve(action_id=action_id, validator=validator)
+            outcome = api_client.approve(
+                action_id=action_id, validator=validator, priority=priority
+            )
         else:
             outcome = api_client.reject(
                 action_id=action_id, validator=validator, reason=reason.strip()
@@ -336,6 +341,13 @@ def render_action(action: dict) -> None:
             value=st.session_state.get(KEY_VALIDATOR_NAME, ""),
             key=f"validator_{action_id}",
         )
+        proposed = payload.get("priority")
+        priority = st.selectbox(
+            "Priorité du ticket (à confirmer ou corriger)",
+            PRIORITIES,
+            index=PRIORITIES.index(proposed) if proposed in PRIORITIES else 1,
+            key=f"priority_{action_id}",
+        )
         reason = st.text_input("Motif du refus (facultatif)", key=f"reason_{action_id}")
         left, right = st.columns(2)
         approved = left.form_submit_button(
@@ -343,7 +355,7 @@ def render_action(action: dict) -> None:
         )
         rejected = right.form_submit_button("Refuser", key="reject_action")
     if approved or rejected:
-        decide_action(action_id, approved, validator, reason)
+        decide_action(action_id, approved, validator, reason, priority)
 
 
 def render_feedback(request_id: str) -> None:

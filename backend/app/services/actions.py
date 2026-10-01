@@ -43,7 +43,8 @@ def approve_action(action_id: str, decision: ActionDecision) -> ActionResult:
                 subject=payload["subject"],
                 body=payload["summary"],
                 kind="intervention",
-                priority=payload.get("priority"),
+                # The validator's priority, when given, replaces the proposed one.
+                priority=decision.priority or payload.get("priority"),
                 source="agent",
                 created_by=decision.validator,
                 request_id=action.request_id,

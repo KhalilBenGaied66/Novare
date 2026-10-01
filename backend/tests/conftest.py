@@ -9,7 +9,7 @@ import json
 
 import pytest
 
-from app.core.config import get_settings, reset_settings
+from app.core.config import Settings, get_settings, reset_settings
 from app.core.logging import request_id_var
 
 MINI_DOCS = {
@@ -133,6 +133,11 @@ def env(tmp_path, monkeypatch):
         # LiteLLM otherwise downloads its price table from GitHub on first import.
         "LITELLM_LOCAL_MODEL_COST_MAP": "True",
     }
+    # A developer's .env must not change what the tests see: the file is not read, and
+    # the values config.py already exported from it at import are removed.
+    monkeypatch.setitem(Settings.model_config, "env_file", None)
+    for field in Settings.model_fields:
+        monkeypatch.delenv(field.upper(), raising=False)
     for name, value in overrides.items():
         monkeypatch.setenv(name, value)
     for name in ("MISTRAL_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"):

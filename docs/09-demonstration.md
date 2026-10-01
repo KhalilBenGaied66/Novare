@@ -30,8 +30,10 @@ Bouton **Panne de chaudière**.
   l'échéance, proposition de ticket.
 - Le brouillon reprend la formule du client, le délai contractuel et l'échéance en
   heures ouvrées.
-- Aucun ticket n'existe à ce stade. Saisir un nom de valideur et cliquer sur **Valider
-  la création du ticket** : le ticket est créé. Cliquer de nouveau ne crée rien.
+- Aucun ticket n'existe à ce stade. Saisir un nom de valideur, confirmer ou corriger la
+  priorité, puis cliquer sur **Valider la création du ticket** : le ticket est créé et
+  le formulaire laisse place au résultat. Un second appel à l'API pour la même
+  proposition renvoie le même ticket.
 
 ## 4. Une demande sensible
 
@@ -46,7 +48,9 @@ avec le client `C-12`.
 Saisir : « Quelle est la franchise prévue au contrat du client C-34 ? » avec le client
 `C-45`.
 
-- Le contrat de C-34 n'apparaît ni dans la réponse ni dans les sources.
+- Le contrat de C-34 n'apparaît ni dans la réponse ni dans les sources. Même résultat
+  en laissant le champ client vide : citer un identifiant dans le texte n'ouvre pas le
+  contrat. Avec le client `C-34`, son contrat figure parmi les sources citées.
 - En mode extraits, le passage cité peut être sans rapport avec la question : c'est la
   limite du mode sans modèle, décrite dans [05-evaluation.md](05-evaluation.md).
 
@@ -54,8 +58,8 @@ Saisir : « Quelle est la franchise prévue au contrat du client C-34 ? » avec 
 
 - Barre latérale : demandes par voie, part des transmissions, latence, coût LLM (0 €
   sans modèle).
-- En ligne de commande : `make eval` affiche le rapport d'évaluation et échoue si un
-  seuil n'est pas tenu.
+- En ligne de commande : `make eval` affiche le rapport d'évaluation, cas en échec
+  compris, et échoue si un seuil n'est pas tenu.
 
 ## Avec une clé d'API
 

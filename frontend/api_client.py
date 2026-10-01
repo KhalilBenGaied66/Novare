@@ -46,8 +46,11 @@ def ask(q: str, client_id: str | None, montant: float | None) -> dict:
     return _call("POST", f"{API_PREFIX}/ask", payload, ASK_TIMEOUT_S)
 
 
-def approve(action_id: str, validator: str) -> dict:
+def approve(action_id: str, validator: str, priority: str | None = None) -> dict:
+    """Approve a proposed ticket; `priority` replaces the proposed priority when given."""
     payload = {"validator": validator}
+    if priority is not None:
+        payload["priority"] = priority
     return _call("POST", _action_path(action_id, "approve"), payload, ACTION_TIMEOUT_S)
 
 

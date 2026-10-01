@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     llm_timeout_s: float = 30.0
     llm_max_retries: int = 2
     rag_max_tokens: int = 600
-    agent_max_tokens: int = 1200
+    agent_max_tokens: int = 4000
     agent_max_steps: int = 6
     max_cost_eur_per_request: float = 0.02  # RG-08
     usd_to_eur: float = 0.90  # indicative rate used to convert provider prices
@@ -68,9 +68,6 @@ class Settings(BaseSettings):
     # --- Business rules --------------------------------------------------
     rg03_max_amount: float = 500.0  # RG-03: disputes strictly below are automated
     ticket_dedupe_days: int = 7
-
-    # --- Limits ----------------------------------------------------------
-    max_question_chars: int = 2000
 
     # --- Logging ---------------------------------------------------------
     log_level: str = "INFO"

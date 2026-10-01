@@ -1,11 +1,16 @@
 """Evaluation of the real pipeline on the golden set.
 
-Every case goes through `triage` and `handle_ask` exactly as an API request would, against
-the configured corpus but an isolated temporary database. The report gives the metrics
-per split (dev is the split used for tuning, test is only measured) and lists every
-failed check. The gate compares the metrics of the whole set with `evals/thresholds.json`.
+Every case goes through `triage` and `handle_ask` exactly as an API request would, on an
+index rebuilt from the configured corpus and with a temporary database. The report gives
+the metrics per split and lists every failed check. Rules and thresholds are tuned on
+`dev`; `test` holds cases written afterwards, except where docs/05-evaluation.md says a
+comparison used both. The gate compares the metrics of the whole set with
+`evals/thresholds.json`.
 
     python -m app.eval.run_eval [--split dev|test|all] [--judge] [--no-gate]
+
+One report per configuration is written under evals/reports: `bm25`, `hybrid`, with the
+suffix `-llm` when a model answered.
 """
 
 import argparse
@@ -103,7 +108,7 @@ def evaluate_case(case: dict, judge: bool = False) -> CaseResult:
 
     # Same search as the pipeline: masked question without tags, client-scoped.
     query = pii.strip_tags(pii.redact(req.q)[0])
-    client_id = decision.client_id if decision.client_known else None
+    client_id = decision.scoped_client_id
     retrieved = hybrid.get_retriever().search(query, client_id=client_id)
     retrieved_docs = [item.chunk.doc for item in retrieved]
     cited_docs = [citation.doc for citation in response.citations]
@@ -115,7 +120,9 @@ def evaluate_case(case: dict, judge: bool = False) -> CaseResult:
             f"aucun document attendu dans les sources ({', '.join(dict.fromkeys(retrieved_docs))})",
         )
         result.reciprocal_rank = metrics.reciprocal_rank(case["expected_docs"], retrieved_docs)
-        if response.route in ("rag", "agent"):
+        if case["expected_final_route"] in ("rag", "agent"):
+            # A request that should have been answered and was escalated cites nothing:
+            # it counts as a miss here, not as a case left out.
             check(
                 "citation",
                 metrics.hit(case["expected_docs"], cited_docs),
@@ -198,11 +205,12 @@ def run_eval(split: str = "all", judge: bool = False) -> dict:
 
 
 def _ensure_index() -> None:
-    """Build the index when it is missing or was built for another retrieval mode."""
-    settings = get_settings()
-    status = hybrid.index_status()
-    if not status["ready"] or (settings.retrieval_mode == "hybrid" and status["mode"] != "hybrid"):
-        ingest.ingest_docs()
+    """Rebuild the index, so that the evaluation measures the corpus as it is now.
+
+    An index left on disk could predate a change of documents, of chunking or of
+    retrieval mode.
+    """
+    ingest.ingest_docs()
 
 
 def _build_report(results: list[CaseResult], split: str) -> dict:
@@ -245,13 +253,20 @@ def _build_report(results: list[CaseResult], split: str) -> dict:
     }
 
 
+def report_name(report: dict) -> str:
+    """File name of a report: the configuration it measured ("bm25", "hybrid-llm")."""
+    config = report["config"]
+    return config["retrieval_mode"] + ("-llm" if config["llm"] else "")
+
+
 def _write_report(report: dict) -> None:
     reports_dir = get_settings().evals_dir / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
-    (reports_dir / "latest.json").write_text(
+    name = report_name(report)
+    (reports_dir / f"{name}.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    (reports_dir / "latest.md").write_text(render_markdown(report), encoding="utf-8")
+    (reports_dir / f"{name}.md").write_text(render_markdown(report), encoding="utf-8")
 
 
 _METRIC_LABELS = {
@@ -260,14 +275,14 @@ _METRIC_LABELS = {
     "final_route_accuracy": "Route finale",
     "retrieval_hit_rate": "Document attendu retrouvé (top-k)",
     "retrieval_mrr": "MRR",
-    "citation_hit_rate": "Document attendu cité",
+    "citation_hit_rate": "Document attendu cité (demandes à répondre)",
     "fact_accuracy": "Faits attendus dans la réponse",
     "pii_accuracy": "Données personnelles détectées",
     "forbidden_doc_violations": "Documents interdits atteints",
     "forbidden_fact_violations": "Faits interdits dans la réponse",
     "faithfulness": "Fidélité (juge LLM)",
-    "latency_ms_mean": "Latence moyenne (ms)",
-    "latency_ms_p95": "Latence p95 (ms)",
+    "latency_ms_mean": "Latence moyenne (ms, indicatif)",
+    "latency_ms_p95": "Latence p95 (ms, indicatif)",
     "cost_eur_total": "Coût total (€)",
 }
 

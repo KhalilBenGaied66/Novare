@@ -6,6 +6,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
@@ -27,7 +28,11 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     setup_logging()
     session.init_db()
     settings = get_settings()
-    if settings.auto_ingest and not hybrid.index_status()["ready"]:
+    status = hybrid.index_status()
+    # An index built without vectors (by an offline evaluation, for instance) would
+    # silently serve lexical search only.
+    stale = settings.retrieval_mode == "hybrid" and status["mode"] != "hybrid"
+    if settings.auto_ingest and (not status["ready"] or stale):
         try:
             report = ingest.ingest_docs()
             logger.info("auto_ingest", extra={"docs": report.docs, "chunks": report.chunks})
@@ -81,6 +86,13 @@ def create_app() -> FastAPI:
                 "puis réessayez."
             },
         )
+
+    @app.exception_handler(RequestValidationError)
+    async def invalid_request(_request: Request, exc: RequestValidationError) -> JSONResponse:
+        # Where and why only: the default body also echoes the rejected value, which
+        # can be the text of a request, and fails to serialise values such as NaN.
+        errors = [{"loc": list(error["loc"]), "msg": error["msg"]} for error in exc.errors()]
+        return JSONResponse(status_code=422, content={"detail": errors})
 
     @app.exception_handler(Exception)
     async def unhandled(_request: Request, exc: Exception) -> JSONResponse:

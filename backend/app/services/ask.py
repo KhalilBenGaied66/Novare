@@ -4,6 +4,8 @@ This is the one place where an unexpected failure of a route is turned into an
 escalation to a person: a request is never lost and never answered with a stack trace.
 """
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from app.agents import dossier_agent, triage
 from app.core import pii
 from app.core.logging import get_logger, request_id_var
@@ -27,6 +29,8 @@ _ERROR_ANSWER = (
 
 def handle_ask(req: AskRequest, request_id: str | None = None) -> AskResponse:
     """Handle one request end to end and write its row in the request log.
+
+    A failure to write that row is logged and does not fail the request.
 
     `request_id` is the identifier chosen by the HTTP layer, when there is one.
     `IndexNotReady` is the only exception that leaves this function: the API answers 503.
@@ -59,7 +63,12 @@ def handle_ask(req: AskRequest, request_id: str | None = None) -> AskResponse:
     response.pii_redacted = list(ctx.pii_types)
     response.usage = ctx.usage
     response.latency_ms = ctx.elapsed_ms()
-    _record(response, decision, ctx, error)
+    try:
+        _record(response, decision, ctx, error)
+    except SQLAlchemyError as exc:
+        # The route has already done its work (a ticket may exist): losing the log
+        # line must not turn the answer into an error and make the caller resend.
+        logger.error("request_log_failed", extra={"error": type(exc).__name__}, exc_info=exc)
     logger.info(
         "ask_done",
         extra={

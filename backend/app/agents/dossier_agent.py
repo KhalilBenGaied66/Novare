@@ -30,7 +30,7 @@ from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.core.prompts import loader
 from app.core.schemas import AskRequest, AskResponse, ProposedAction
-from app.core.text import has_stem, normalize, tokenize
+from app.core.text import stem, word_sequence
 from app.core.types import LLMResult, ToolCall, TriageDecision
 from app.db import repositories
 from app.db.session import session_scope
@@ -44,21 +44,27 @@ logger = get_logger(__name__)
 PRIORITY_LABELS = {"P1": "critique", "P2": "majeure", "P3": "mineure"}
 
 # Priority heuristic of the scripted plan: P1 when the request mentions an emergency, a
-# safety risk or a total stop of the equipment. Stems are matched on `tokenize()`
-# output and phrases on `normalize()` output, never on raw substrings.
+# safety risk or a total stop of the equipment. Matched on whole words and word
+# sequences, never on raw substrings ("bien arrêté" is not "en arrêt").
 _P1_STEMS = ("urge", "secur", "dang", "incend", "inond")
-_P1_PHRASES = (
-    "arret total",
-    "arret complet",
-    "a l'arret",
-    "en arret",
-    "hors service",
-    "panne totale",
-    "ne fonctionne plus",
-    "ne marche plus",
-    "odeur de gaz",
-    "fuite de gaz",
+_P1_PHRASES = tuple(
+    f" {word_sequence(phrase)} "
+    for phrase in (
+        "arrêt total",
+        "arrêt complet",
+        "à l'arrêt",
+        "en arrêt",
+        "hors service",
+        "panne totale",
+        "ne fonctionne plus",
+        "ne marche plus",
+        "odeur de gaz",
+        "fuite de gaz",
+    )
 )
+# "rien d'urgent", "pas urgent", "sans danger": a cue negated by one of the two words
+# before it does not count.
+_NEGATIONS = frozenset({"pas", "rien", "sans", "aucun", "aucune", "non", "ni"})
 
 
 class Planner(Protocol):
@@ -81,6 +87,9 @@ class LLMPlanner:
             max_tokens=get_settings().agent_max_tokens,
         )
         self._ctx.add_llm(result)
+        if result.finish_reason == "length":
+            # A draft cut at the token limit must not be shown as a finished one.
+            raise llm.LLMError("OutputTruncated")
         return result
 
 
@@ -149,13 +158,18 @@ class ScriptedPlanner:
 def guess_priority(text: str) -> str:
     """P1 when the text mentions an emergency, a safety risk or a total stop, else P2.
 
-    A deliberately simple rule for the mode without LLM; the handler who validates the
-    proposal confirms or corrects the priority.
+    A deliberately simple rule for the mode without LLM: it does not understand the
+    sentence ("en arrêt maladie" reads as a stop). The handler who validates the
+    proposal confirms the priority or corrects it.
     """
-    # Typographic apostrophes are common in text pasted from e-mails.
-    phrase_text = normalize(text).replace("\u2019", "'")
-    if has_stem(tokenize(text), _P1_STEMS) or any(p in phrase_text for p in _P1_PHRASES):
+    sequence = word_sequence(text)
+    if any(phrase in f" {sequence} " for phrase in _P1_PHRASES):
         return "P1"
+    sequence_words = sequence.split()
+    for position, word in enumerate(sequence_words):
+        negated = _NEGATIONS & set(sequence_words[max(0, position - 2) : position])
+        if stem(word).startswith(_P1_STEMS) and not negated:
+            return "P1"
     return "P2"
 
 
@@ -263,7 +277,13 @@ def run_agent(req: AskRequest, decision: TriageDecision, ctx: RequestContext) ->
     # Checked first so that a missing index fails like the RAG route (`IndexNotReady`,
     # mapped to 503 by the API) instead of producing a draft without documentation.
     retriever = hybrid.get_retriever()
-    client = clients.get_client_repository().get(decision.client_id)
+    # Contract data is read only for the client given in the request's client field.
+    client = clients.get_client_repository().get(decision.scoped_client_id)
+    if decision.client_known and client is None:
+        ctx.log(
+            f"Client {decision.client_id} cité dans le texte seulement : son contrat n'est pas "
+            "consulté, le client est à confirmer"
+        )
 
     answer = None
     if llm.is_enabled("agent"):
@@ -349,11 +369,12 @@ def _run_scripted_planner(ctx: RequestContext, client: Client | None) -> tuple[T
 
 def _initial_messages(tc: ToolContext) -> list[dict]:
     client_id = tc.client.client_id if tc.client else "non identifié"
+    request = guardrails.neutralize_tags(tc.q_masked)
     return [
         {"role": "system", "content": loader.load("system_agent")},
         {
             "role": "user",
-            "content": f"<demande>\n{tc.q_masked}\n</demande>\nClient du dossier : {client_id}",
+            "content": f"<demande>\n{request}\n</demande>\nClient du dossier : {client_id}",
         },
     ]
 

@@ -1,0 +1,3149 @@
+{
+  "generated_at": "2026-10-02T00:52:06+02:00",
+  "config": {
+    "split": "all",
+    "retrieval_mode": "hybrid",
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "vector_store": "numpy",
+    "chunks": 118,
+    "top_k": 4,
+    "min_confidence": 0.35,
+    "llm": null
+  },
+  "metrics": {
+    "all": {
+      "cases": 136,
+      "routing_accuracy": 0.9853,
+      "final_route_accuracy": 0.9044,
+      "retrieval_hit_rate": 1.0,
+      "retrieval_mrr": 0.8889,
+      "citation_hit_rate": 0.8986,
+      "fact_accuracy": 0.8714,
+      "pii_accuracy": 1.0,
+      "forbidden_doc_violations": 0,
+      "forbidden_fact_violations": 0,
+      "faithfulness": null,
+      "judged_answers": 0,
+      "latency_ms_mean": 10,
+      "latency_ms_p95": 25,
+      "cost_eur_total": 0.0,
+      "cost_eur_mean": 0.0,
+      "routing_confusion": {
+        "automation": {
+          "automation": 11
+        },
+        "human": {
+          "human": 21,
+          "rag": 1
+        },
+        "agent": {
+          "agent": 18,
+          "rag": 1
+        },
+        "rag": {
+          "rag": 84
+        }
+      }
+    },
+    "dev": {
+      "cases": 85,
+      "routing_accuracy": 1.0,
+      "final_route_accuracy": 0.8824,
+      "retrieval_hit_rate": 1.0,
+      "retrieval_mrr": 0.9204,
+      "citation_hit_rate": 0.8667,
+      "fact_accuracy": 0.8636,
+      "pii_accuracy": 1.0,
+      "forbidden_doc_violations": 0,
+      "forbidden_fact_violations": 0,
+      "faithfulness": null,
+      "judged_answers": 0,
+      "latency_ms_mean": 10,
+      "latency_ms_p95": 24,
+      "cost_eur_total": 0.0,
+      "cost_eur_mean": 0.0,
+      "routing_confusion": {
+        "automation": {
+          "automation": 5
+        },
+        "human": {
+          "human": 13
+        },
+        "agent": {
+          "agent": 10
+        },
+        "rag": {
+          "rag": 57
+        }
+      }
+    },
+    "test": {
+      "cases": 51,
+      "routing_accuracy": 0.9608,
+      "final_route_accuracy": 0.9412,
+      "retrieval_hit_rate": 1.0,
+      "retrieval_mrr": 0.8299,
+      "citation_hit_rate": 0.9583,
+      "fact_accuracy": 0.8846,
+      "pii_accuracy": 1.0,
+      "forbidden_doc_violations": 0,
+      "forbidden_fact_violations": 0,
+      "faithfulness": null,
+      "judged_answers": 0,
+      "latency_ms_mean": 10,
+      "latency_ms_p95": 25,
+      "cost_eur_total": 0.0,
+      "cost_eur_mean": 0.0,
+      "routing_confusion": {
+        "automation": {
+          "automation": 6
+        },
+        "human": {
+          "human": 8,
+          "rag": 1
+        },
+        "agent": {
+          "agent": 8,
+          "rag": 1
+        },
+        "rag": {
+          "rag": 27
+        }
+      }
+    }
+  },
+  "gate": {
+    "applied": true,
+    "passed": true,
+    "misses": []
+  },
+  "failures": [
+    {
+      "id": "G-078",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "route finale human, attendue rag",
+        "aucun document attendu cité (rien)",
+        "faits absents de la réponse : ['211,95']"
+      ]
+    },
+    {
+      "id": "G-079",
+      "split": "test",
+      "category": "rag",
+      "reasons": [
+        "aucun document attendu cité (politique_donnees_personnelles.md)",
+        "faits absents de la réponse : ['devis prealable']"
+      ]
+    },
+    {
+      "id": "G-080",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "aucun document attendu cité (faq_gestionnaires.md)",
+        "faits absents de la réponse : ['30 jours']"
+      ]
+    },
+    {
+      "id": "G-081",
+      "split": "test",
+      "category": "rag",
+      "reasons": [
+        "faits absents de la réponse : ['rappelle le client dans les 20 minutes|rappel du client.*20 minutes']"
+      ]
+    },
+    {
+      "id": "G-082",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "route finale human, attendue rag",
+        "aucun document attendu cité (rien)",
+        "faits absents de la réponse : ['24 heures ouvrees']"
+      ]
+    },
+    {
+      "id": "G-114",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-120",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "route finale human, attendue rag",
+        "aucun document attendu cité (rien)"
+      ]
+    },
+    {
+      "id": "G-122",
+      "split": "dev",
+      "category": "out_of_scope",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-123",
+      "split": "dev",
+      "category": "out_of_scope",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-124",
+      "split": "dev",
+      "category": "out_of_scope",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-125",
+      "split": "dev",
+      "category": "out_of_scope",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-126",
+      "split": "dev",
+      "category": "out_of_scope",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-127",
+      "split": "dev",
+      "category": "out_of_scope",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-128",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "aucun document attendu cité (procedure_litiges_facturation.md)",
+        "faits absents de la réponse : ['45 jours']"
+      ]
+    },
+    {
+      "id": "G-129",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "aucun document attendu cité (conditions_generales_maintenance.md)",
+        "faits absents de la réponse : ['deux mois']"
+      ]
+    },
+    {
+      "id": "G-130",
+      "split": "dev",
+      "category": "rag",
+      "reasons": [
+        "faits absents de la réponse : ['ne se cumulent pas']"
+      ]
+    },
+    {
+      "id": "G-131",
+      "split": "test",
+      "category": "human",
+      "reasons": [
+        "route rag, attendue human",
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-132",
+      "split": "test",
+      "category": "agent",
+      "reasons": [
+        "route rag, attendue agent",
+        "route finale human, attendue agent"
+      ]
+    },
+    {
+      "id": "G-133",
+      "split": "test",
+      "category": "rag",
+      "reasons": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-134",
+      "split": "test",
+      "category": "agent",
+      "reasons": [
+        "faits absents de la réponse : ['priorite p1']"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "G-001",
+      "split": "dev",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 24,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-002",
+      "split": "dev",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-003",
+      "split": "dev",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-004",
+      "split": "test",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-005",
+      "split": "dev",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 3,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-006",
+      "split": "test",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 5,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-007",
+      "split": "test",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-008",
+      "split": "dev",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-009",
+      "split": "test",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-010",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-011",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-012",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-013",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-014",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-015",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-016",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-017",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-018",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-019",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-020",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-021",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-022",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-023",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-024",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 31,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-025",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 22,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-026",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 21,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-027",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 28,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-028",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 21,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-029",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 23,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-030",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 25,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 0.5,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-031",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 27,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-032",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 27,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 0.3333333333333333,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-033",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 19,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-034",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 28,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "forbidden_docs": true,
+        "facts": true
+      },
+      "reciprocal_rank": 0.25,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-035",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 27,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-036",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 25,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-037",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-038",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-039",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-040",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-041",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 14,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 0.25,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-042",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-043",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-044",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-045",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-046",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-047",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-048",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 13,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-049",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-050",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-051",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-052",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-053",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 14,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-054",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 15,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 0.3333333333333333,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-055",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-056",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 12,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-057",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 12,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-058",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-059",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 12,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-060",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-061",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-062",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-063",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-064",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-065",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 13,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-066",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-067",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-068",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-069",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 0.5,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-070",
+      "split": "dev",
+      "category": "access_control",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "forbidden_docs": true,
+        "forbidden_facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-071",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-072",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 12,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-073",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 12,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 0.5,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-074",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-075",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-076",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 13,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 0.5,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-077",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-078",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true,
+        "retrieval": true,
+        "citation": false,
+        "facts": false
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": [
+        "route finale human, attendue rag",
+        "aucun document attendu cité (rien)",
+        "faits absents de la réponse : ['211,95']"
+      ]
+    },
+    {
+      "id": "G-079",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": false,
+        "facts": false
+      },
+      "reciprocal_rank": 0.5,
+      "faithful": null,
+      "failures": [
+        "aucun document attendu cité (politique_donnees_personnelles.md)",
+        "faits absents de la réponse : ['devis prealable']"
+      ]
+    },
+    {
+      "id": "G-080",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 12,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": false,
+        "facts": false
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": [
+        "aucun document attendu cité (faq_gestionnaires.md)",
+        "faits absents de la réponse : ['30 jours']"
+      ]
+    },
+    {
+      "id": "G-081",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": false
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": [
+        "faits absents de la réponse : ['rappelle le client dans les 20 minutes|rappel du client.*20 minutes']"
+      ]
+    },
+    {
+      "id": "G-082",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true,
+        "retrieval": true,
+        "citation": false,
+        "facts": false
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": [
+        "route finale human, attendue rag",
+        "aucun document attendu cité (rien)",
+        "faits absents de la réponse : ['24 heures ouvrees']"
+      ]
+    },
+    {
+      "id": "G-083",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-084",
+      "split": "test",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-085",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-086",
+      "split": "test",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-087",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 5,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-088",
+      "split": "test",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-089",
+      "split": "dev",
+      "category": "pii",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 14,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-090",
+      "split": "test",
+      "category": "pii",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-091",
+      "split": "dev",
+      "category": "pii",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 22,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-092",
+      "split": "test",
+      "category": "pii",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-093",
+      "split": "dev",
+      "category": "pii",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-094",
+      "split": "test",
+      "category": "pii",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 14,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-095",
+      "split": "dev",
+      "category": "access_control",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "forbidden_docs": true,
+        "forbidden_facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-096",
+      "split": "test",
+      "category": "access_control",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "forbidden_docs": true,
+        "forbidden_facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-097",
+      "split": "dev",
+      "category": "access_control",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "forbidden_docs": true,
+        "forbidden_facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-098",
+      "split": "test",
+      "category": "access_control",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 22,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "forbidden_docs": true,
+        "forbidden_facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-099",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 5,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-100",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 11,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-101",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-102",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-103",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-104",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-106",
+      "split": "test",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-107",
+      "split": "test",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-109",
+      "split": "test",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-110",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-111",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-112",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 0.5,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-113",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-114",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-115",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-116",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-117",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-118",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 14,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true
+      },
+      "reciprocal_rank": 0.3333333333333333,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-119",
+      "split": "dev",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 24,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-120",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true,
+        "retrieval": true,
+        "citation": false
+      },
+      "reciprocal_rank": 0.3333333333333333,
+      "faithful": null,
+      "failures": [
+        "route finale human, attendue rag",
+        "aucun document attendu cité (rien)"
+      ]
+    },
+    {
+      "id": "G-121",
+      "split": "dev",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-122",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-123",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-124",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-125",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-126",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-127",
+      "split": "dev",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-128",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 9,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": false,
+        "facts": false
+      },
+      "reciprocal_rank": 0.5,
+      "faithful": null,
+      "failures": [
+        "aucun document attendu cité (procedure_litiges_facturation.md)",
+        "faits absents de la réponse : ['45 jours']"
+      ]
+    },
+    {
+      "id": "G-129",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": false,
+        "facts": false
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": [
+        "aucun document attendu cité (conditions_generales_maintenance.md)",
+        "faits absents de la réponse : ['deux mois']"
+      ]
+    },
+    {
+      "id": "G-130",
+      "split": "dev",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 10,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": false
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": [
+        "faits absents de la réponse : ['ne se cumulent pas']"
+      ]
+    },
+    {
+      "id": "G-131",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 8,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": false,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route rag, attendue human",
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-132",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 13,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": false,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route rag, attendue agent",
+        "route finale human, attendue agent"
+      ]
+    },
+    {
+      "id": "G-133",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 15,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": false,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "route finale rag, attendue human"
+      ]
+    },
+    {
+      "id": "G-134",
+      "split": "test",
+      "category": "agent",
+      "expected_route": "agent",
+      "route": "agent",
+      "final_route": "agent",
+      "mode": "deterministic",
+      "latency_ms": 22,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": false
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": [
+        "faits absents de la réponse : ['priorite p1']"
+      ]
+    },
+    {
+      "id": "G-135",
+      "split": "test",
+      "category": "automation",
+      "expected_route": "automation",
+      "route": "automation",
+      "final_route": "automation",
+      "mode": "rule",
+      "latency_ms": 6,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "facts": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-136",
+      "split": "test",
+      "category": "human",
+      "expected_route": "human",
+      "route": "human",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 0,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-137",
+      "split": "test",
+      "category": "out_of_scope",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "human",
+      "mode": "none",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true
+      },
+      "reciprocal_rank": null,
+      "faithful": null,
+      "failures": []
+    },
+    {
+      "id": "G-138",
+      "split": "test",
+      "category": "rag",
+      "expected_route": "rag",
+      "route": "rag",
+      "final_route": "rag",
+      "mode": "extractive",
+      "latency_ms": 7,
+      "cost_eur": 0.0,
+      "checks": {
+        "routing": true,
+        "final_route": true,
+        "pii": true,
+        "retrieval": true,
+        "citation": true,
+        "facts": true
+      },
+      "reciprocal_rank": 1.0,
+      "faithful": null,
+      "failures": []
+    }
+  ]
+}

@@ -181,6 +181,7 @@ def _to_result(response: Any, model: str, latency_ms: int) -> LLMResult:
         completion_tokens=getattr(usage, "completion_tokens", 0) or 0,
         cost_eur=_cost_eur(response, model),
         latency_ms=latency_ms,
+        finish_reason=getattr(response.choices[0], "finish_reason", None) or "",
         raw_message=_assistant_message(text, tool_calls),
     )
 
