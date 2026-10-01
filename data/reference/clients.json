@@ -1,0 +1,54 @@
+{
+  "clients": [
+    {
+      "client_id": "C-12",
+      "nom": "Syndic Lumière",
+      "formule": "Confort",
+      "date_debut": "2025-01-01",
+      "date_fin": "2028-12-31",
+      "astreinte_weekend": false,
+      "sites": ["Chaufferie de l'immeuble Lumière, Lyon 3e"]
+    },
+    {
+      "client_id": "C-27",
+      "nom": "Clinique des Tilleuls",
+      "formule": "Premium",
+      "date_debut": "2024-03-01",
+      "date_fin": "2029-02-28",
+      "astreinte_weekend": true,
+      "sites": ["Bloc technique de la clinique, Villeurbanne"]
+    },
+    {
+      "client_id": "C-34",
+      "nom": "Garage du Moulin",
+      "formule": "Essentiel",
+      "date_debut": "2024-07-01",
+      "date_fin": "2026-06-30",
+      "astreinte_weekend": false,
+      "sites": ["Atelier du garage, Vénissieux"]
+    },
+    {
+      "client_id": "C-45",
+      "nom": "Résidence Les Cèdres",
+      "formule": "Confort",
+      "date_debut": "2025-09-01",
+      "date_fin": "2029-08-31",
+      "astreinte_weekend": false,
+      "sites": ["Chaufferie et ventilation de la résidence, Bron"]
+    },
+    {
+      "client_id": "C-58",
+      "nom": "Hôtel des Brotteaux",
+      "formule": "Premium",
+      "date_debut": "2026-01-01",
+      "date_fin": "2030-12-31",
+      "astreinte_weekend": true,
+      "sites": ["Hôtel, Lyon 6e", "Annexe séminaires, Caluire-et-Cuire"]
+    }
+  ],
+  "sla_heures": {
+    "Premium": {"P1": 2, "P2": 4, "P3": 24},
+    "Confort": {"P1": 4, "P2": 8, "P3": 48},
+    "Essentiel": {"P1": 8, "P2": 24, "P3": 72}
+  }
+}

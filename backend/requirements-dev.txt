@@ -1,0 +1,8 @@
+-r requirements.txt
+-r ../frontend/requirements.txt
+pytest==9.1.1
+ruff==0.16.9
+# TestClient
+httpx==0.28.1
+# scripts/make_sample_pdf.py and the PDF fixtures of the tests
+fpdf2==2.8.9

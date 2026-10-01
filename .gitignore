@@ -1,0 +1,25 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Local configuration and secrets
+.env
+
+# Private working notes: never published
+_private/
+
+# Generated at runtime
+data/index/
+data/models/
+data/*.db
+evals/candidates.json
+evals/reports/*
+!evals/reports/latest.md
+!evals/reports/latest.json
+
+# Tools
+.streamlit/
+.claude/

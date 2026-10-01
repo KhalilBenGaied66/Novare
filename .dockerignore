@@ -1,0 +1,15 @@
+.git
+.github
+.venv
+_private
+.env
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+data/index
+data/models
+data/*.db
+evals/reports
+evals/candidates.json
+docs

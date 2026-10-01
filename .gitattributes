@@ -1,0 +1,4 @@
+* text=auto
+# The e-mail of the corpus must keep LF line endings on every platform.
+*.eml text eol=lf
+*.pdf binary

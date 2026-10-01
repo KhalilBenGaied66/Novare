@@ -1,0 +1,77 @@
+# Full stack: API, Streamlit front, PostgreSQL, Qdrant.
+# Required in the environment or in .env: POSTGRES_PASSWORD. Optional: API_KEY and the
+# provider keys (without a key the API answers in extractive / deterministic mode).
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://dossierops:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db:5432/dossierops
+      QDRANT_URL: http://qdrant:6333
+      API_KEY: ${API_KEY:-}
+      # One counter is shared by every caller holding the API key (the front included).
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-300}
+      LLM_ENABLED: ${LLM_ENABLED:-auto}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - index:/srv/data/index
+      # The embedding model (about 220 MB) is downloaded here on first start.
+      - models:/srv/data/models
+    depends_on:
+      db:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    environment:
+      API_URL: http://api:8000
+      API_KEY: ${API_KEY:-}
+    ports:
+      - "127.0.0.1:8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: dossierops
+      POSTGRES_USER: dossierops
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dossierops -d dossierops"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.19.1
+    volumes:
+      - qdrant:/qdrant/storage
+    healthcheck:
+      # The image has no curl: open a TCP connection to the HTTP port with bash.
+      test: ["CMD-SHELL", "bash -c ':> /dev/tcp/127.0.0.1/6333' || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  index:
+  models:
+  pgdata:
+  qdrant:

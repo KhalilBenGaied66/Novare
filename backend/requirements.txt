@@ -1,0 +1,17 @@
+# Runtime dependencies, pinned to the versions the test suite runs against.
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-dotenv==1.2.3
+sqlalchemy==2.1.1
+psycopg[binary]==3.3.6
+numpy==2.4.6
+snowballstemmer==3.1.1
+pypdf==6.19.0
+fastembed==0.8.1
+qdrant-client==1.19.1
+langgraph==1.2.12
+litellm==1.103.1
+# zoneinfo needs the tz database on Windows and on slim images.
+tzdata==2026.4

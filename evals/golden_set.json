@@ -1,0 +1,2749 @@
+[
+  {
+    "id": "G-001",
+    "split": "dev",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "champs_explicites"
+    ],
+    "input": {
+      "q": "Je conteste la facture de l'intervention du mois dernier : la majoration week-end a été appliquée à tort.",
+      "client_id": "C-12",
+      "montant": 120.0
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Client et montant fournis dans les champs : litige < 500 € d'un client connu."
+  },
+  {
+    "id": "G-002",
+    "split": "dev",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "montant_dans_le_texte"
+    ],
+    "input": {
+      "q": "Je conteste la facture F-2026-0412 de 120 € : le déplacement a été compté deux fois.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Montant présent uniquement dans le texte (120 €) ; le numéro de facture ne doit pas être pris pour un montant."
+  },
+  {
+    "id": "G-003",
+    "split": "dev",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "client_dans_le_texte"
+    ],
+    "input": {
+      "q": "Litige de facturation pour le client C-45 : le forfait diagnostic n'a pas été déduit du devis accepté.",
+      "client_id": null,
+      "montant": 120.0
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Identifiant client présent uniquement dans le texte (C-45)."
+  },
+  {
+    "id": "G-004",
+    "split": "test",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "client_dans_le_texte",
+      "montant_dans_le_texte"
+    ],
+    "input": {
+      "q": "Bonjour, ici le client C-27. Je conteste la facture de 245,50 € reçue hier pour une intervention déjà couverte par notre contrat.",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Client et montant (avec décimales) extraits du texte."
+  },
+  {
+    "id": "G-005",
+    "split": "dev",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "doublon"
+    ],
+    "input": {
+      "q": "Le déplacement a été compté deux fois : je conteste la facture F-2026-0412 de 120 €.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Même demande que G-002, mots dans un autre ordre : la route reste automation et le ticket de G-002 doit être réutilisé (aucun second ticket)."
+  },
+  {
+    "id": "G-006",
+    "split": "test",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "montant_dans_le_texte"
+    ],
+    "input": {
+      "q": "Demande de remboursement : un trop-perçu de 60 euros apparaît sur notre dernière facture.",
+      "client_id": "C-58",
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Montant écrit « 60 euros »."
+  },
+  {
+    "id": "G-007",
+    "split": "test",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "seuil"
+    ],
+    "input": {
+      "q": "Facture contestée : 499,99 € pour un déplacement qui n'a jamais eu lieu.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Juste sous le seuil RG-03 (strictement inférieur à 500 €)."
+  },
+  {
+    "id": "G-008",
+    "split": "dev",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "client_dans_le_texte",
+      "montant_dans_le_texte"
+    ],
+    "input": {
+      "q": "Contestation de la facture d'octobre, montant 300 EUR, client C-12.",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Montant écrit « 300 EUR », client dans le texte."
+  },
+  {
+    "id": "G-009",
+    "split": "test",
+    "category": "automation",
+    "tags": [
+      "rg03",
+      "contrat_echu"
+    ],
+    "input": {
+      "q": "Je conteste la facture du diagnostic : 90 € alors que l'intervention a été annulée.",
+      "client_id": "C-34",
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "C-34 est un client connu (contrat échu le 30/06/2026) : RG-03 ne dépend pas de la validité du contrat."
+  },
+  {
+    "id": "G-010",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "resiliation"
+    ],
+    "input": {
+      "q": "Je souhaite la résiliation de notre contrat de maintenance à la fin du mois.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Résiliation : toujours traitée par un gestionnaire."
+  },
+  {
+    "id": "G-011",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "sans_accent"
+    ],
+    "input": {
+      "q": "je veux resilier le contrat, vos penalites de retard sont inacceptables",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Formes sans accent : « resilier », « penalites »."
+  },
+  {
+    "id": "G-012",
+    "split": "test",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "contentieux"
+    ],
+    "input": {
+      "q": "Sans réponse sous huit jours, notre avocat vous adressera une mise en demeure.",
+      "client_id": "C-27",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Avocat et mise en demeure."
+  },
+  {
+    "id": "G-013",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "ordre_des_regles",
+      "petit_montant"
+    ],
+    "input": {
+      "q": "Je conteste la facture de 150 € et je saisis le tribunal si elle n'est pas annulée.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Sujet sensible avec un petit montant et un client connu : RG-04 passe avant RG-03, aucun ticket automatique."
+  },
+  {
+    "id": "G-014",
+    "split": "test",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "ordre_des_regles",
+      "petit_montant"
+    ],
+    "input": {
+      "q": "Remboursez cette facture, sinon nous demanderons la résiliation du contrat.",
+      "client_id": "C-45",
+      "montant": 80.0
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Montant de 80 € fourni dans le champ : RG-04 passe avant RG-03."
+  },
+  {
+    "id": "G-015",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "donnees_personnelles"
+    ],
+    "input": {
+      "q": "Je souhaite exercer mon droit d'accès à mes données personnelles, conformément au RGPD.",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Demande d'exercice de droits sur des données personnelles."
+  },
+  {
+    "id": "G-016",
+    "split": "test",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "donnees_personnelles"
+    ],
+    "input": {
+      "q": "Merci de procéder à la suppression de mes données et de me confirmer l'effacement.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Demande d'effacement, sans le mot RGPD."
+  },
+  {
+    "id": "G-017",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg03b",
+      "montant_dans_le_texte"
+    ],
+    "input": {
+      "q": "Je conteste la facture de 1 250,50 € : les pièces n'ont jamais été posées.",
+      "client_id": "C-27",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Litige >= 500 € (1 250,50 € lu dans le texte) : responsable facturation."
+  },
+  {
+    "id": "G-018",
+    "split": "test",
+    "category": "human",
+    "tags": [
+      "rg03b",
+      "seuil"
+    ],
+    "input": {
+      "q": "Litige sur la facture du mois de mars.",
+      "client_id": "C-12",
+      "montant": 500.0
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Exactement 500 € : le seuil RG-03 est strict, le litige relève de RG-03b."
+  },
+  {
+    "id": "G-019",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg03b",
+      "client_inconnu"
+    ],
+    "input": {
+      "q": "Contestation de la facture de 780 € pour le remplacement du circulateur.",
+      "client_id": "C-99",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "RG-03b ne dépend pas de l'identification du client (C-99 est inconnu)."
+  },
+  {
+    "id": "G-020",
+    "split": "test",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "question_sensible"
+    ],
+    "input": {
+      "q": "Quelles pénalités s'appliquent si le délai d'intervention P1 est dépassé ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Formulée comme une question documentaire, mais les pénalités relèvent de RG-04."
+  },
+  {
+    "id": "G-021",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "contentieux"
+    ],
+    "input": {
+      "q": "Votre service contentieux nous relance à tort, une plainte sera déposée auprès de la CNIL.",
+      "client_id": "C-58",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Contentieux, plainte, CNIL."
+  },
+  {
+    "id": "G-022",
+    "split": "test",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "majuscules",
+      "sans_accent"
+    ],
+    "input": {
+      "q": "RESILIATION IMMEDIATE DU CONTRAT C-34, COURRIER D'HUISSIER A SUIVRE",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Majuscules sans accent."
+  },
+  {
+    "id": "G-023",
+    "split": "dev",
+    "category": "human",
+    "tags": [
+      "rg04",
+      "contentieux"
+    ],
+    "input": {
+      "q": "Notre service juridique étudie une assignation pour les retards répétés.",
+      "client_id": "C-27",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Juridique, assignation."
+  },
+  {
+    "id": "G-024",
+    "split": "dev",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne"
+    ],
+    "input": {
+      "q": "La chaudière de l'immeuble est en panne depuis ce matin, merci d'envoyer un technicien.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-12.md",
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Panne chez un client Confort sans astreinte : brouillon + ticket proposé."
+  },
+  {
+    "id": "G-025",
+    "split": "dev",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "astreinte"
+    ],
+    "input": {
+      "q": "Fuite d'eau importante sur le réseau de chauffage du bloc technique, intervention urgente demandée.",
+      "client_id": "C-27",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-27.md",
+      "procedure_sav.md",
+      "procedure_astreinte.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Client Premium avec astreinte : délai en heures calendaires."
+  },
+  {
+    "id": "G-026",
+    "split": "test",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "contrat_echu"
+    ],
+    "input": {
+      "q": "L'aérotherme de l'atelier ne fonctionne plus, pouvez-vous intervenir cette semaine ?",
+      "client_id": "C-34",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-34.md",
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Contrat échu le 30/06/2026 : aucun délai garanti, devis préalable."
+  },
+  {
+    "id": "G-027",
+    "split": "dev",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "action"
+    ],
+    "input": {
+      "q": "Pouvez-vous programmer la visite préventive annuelle de la chaudière avant l'hiver ?",
+      "client_id": "C-45",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "guide_planification_interventions.pdf",
+      "conditions_generales_maintenance.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Demande d'action (programmer une visite), sans panne."
+  },
+  {
+    "id": "G-028",
+    "split": "test",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "action"
+    ],
+    "input": {
+      "q": "Merci de planifier le remplacement du circulateur de chauffage la semaine prochaine.",
+      "client_id": "C-58",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "guide_planification_interventions.pdf",
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Demande d'action (planifier)."
+  },
+  {
+    "id": "G-029",
+    "split": "dev",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "astreinte"
+    ],
+    "input": {
+      "q": "Le groupe froid du bloc opératoire est hors service depuis 6 h, c'est urgent.",
+      "client_id": "C-27",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-27.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "« hors service » ; clause du contrat C-27 : arrêt d'un groupe froid = P1."
+  },
+  {
+    "id": "G-030",
+    "split": "test",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "action"
+    ],
+    "input": {
+      "q": "Dysfonctionnement de la régulation de chaufferie : merci d'ouvrir un ticket.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-12.md",
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Dysfonctionnement + demande d'ouverture de ticket : le ticket n'est que proposé."
+  },
+  {
+    "id": "G-031",
+    "split": "dev",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "action"
+    ],
+    "input": {
+      "q": "Pouvez-vous vérifier si notre contrat couvre le remplacement du brûleur ?",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-12.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "« vérifier » associé à « contrat »."
+  },
+  {
+    "id": "G-032",
+    "split": "test",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "regle_suivante"
+    ],
+    "input": {
+      "q": "La chaudière est de nouveau en panne et je conteste la facture de la dernière intervention.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-12.md",
+      "procedure_sav.md",
+      "procedure_litiges_facturation.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Contestation sans montant : RG-03 et RG-03b ne s'appliquent pas, la panne mène à RG-05."
+  },
+  {
+    "id": "G-033",
+    "split": "dev",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "client_absent"
+    ],
+    "input": {
+      "q": "Notre pompe à chaleur ne marche plus depuis hier soir.",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Aucun client identifié : l'agent travaille sans contrat et le dit."
+  },
+  {
+    "id": "G-034",
+    "split": "test",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "client_dans_le_texte"
+    ],
+    "input": {
+      "q": "Chaudière en panne sur le site du client C-27, les blocs opératoires ne sont plus chauffés.",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-27.md",
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Client identifié par le texte uniquement."
+  },
+  {
+    "id": "G-035",
+    "split": "dev",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne",
+      "action"
+    ],
+    "input": {
+      "q": "La ventilation de la résidence est en arrêt complet, merci de dépanner au plus vite.",
+      "client_id": "C-45",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "« en arrêt » et « dépanner »."
+  },
+  {
+    "id": "G-036",
+    "split": "test",
+    "category": "agent",
+    "tags": [
+      "rg05",
+      "panne"
+    ],
+    "input": {
+      "q": "Défaillance du brûleur de la chaudière numéro 2, la chaufferie tourne sur une seule chaudière.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-12.md",
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Défaillance : fonctionnement dégradé."
+  },
+  {
+    "id": "G-037",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "sav",
+      "delai"
+    ],
+    "input": {
+      "q": "Quel est le délai d'intervention P2 pour la formule Confort ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_sav.md",
+      "conditions_generales_maintenance.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "8 h ouvrees"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Délai Confort P2."
+  },
+  {
+    "id": "G-038",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "sav",
+      "priorite"
+    ],
+    "input": {
+      "q": "Que signifie une priorité P1 (critique) ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "arret total"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Définition de la priorité P1."
+  },
+  {
+    "id": "G-039",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "sav",
+      "piege"
+    ],
+    "input": {
+      "q": "Comment le client peut-il suivre l'avancement de son ticket ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "portail client"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Le mot « ticket » dans une question simple ne déclenche pas l'agent."
+  },
+  {
+    "id": "G-040",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "sav",
+      "piege"
+    ],
+    "input": {
+      "q": "Les pièces sur commande sont-elles livrées rapidement quand elles ne sont pas en stock ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "3 a 5 jours ouvres"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "« stock » dans une question simple."
+  },
+  {
+    "id": "G-041",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "sav"
+    ],
+    "input": {
+      "q": "Sous quel délai le rapport d'intervention est-il déposé sur le portail ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "sous 24 h"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Compte rendu d'intervention."
+  },
+  {
+    "id": "G-042",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "tarif"
+    ],
+    "input": {
+      "q": "Quelle est la majoration appliquée le week-end sur le déplacement ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "35 ?%"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Majoration week-end."
+  },
+  {
+    "id": "G-043",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "tarif"
+    ],
+    "input": {
+      "q": "Quel est le tarif d'une heure de main-d'œuvre ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "68 ?€"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Tarif horaire de la main-d'œuvre."
+  },
+  {
+    "id": "G-044",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "tarif"
+    ],
+    "input": {
+      "q": "Le forfait diagnostic est-il déduit du devis s'il est accepté ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "120 ?€",
+      "deduit du devis"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Forfait diagnostic."
+  },
+  {
+    "id": "G-045",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "tarif"
+    ],
+    "input": {
+      "q": "Quelle majoration s'applique à une intervention de nuit ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "50 ?%"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Majoration de nuit."
+  },
+  {
+    "id": "G-046",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "tarif",
+      "piege"
+    ],
+    "input": {
+      "q": "Les majorations de nuit et de week-end se cumulent-elles lorsque les périodes se recoupent ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "ne se cumulent pas"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "« et » dans une question simple."
+  },
+  {
+    "id": "G-047",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "tarif"
+    ],
+    "input": {
+      "q": "Quel est le prix de l'option astreinte pour la formule Confort ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "180 ?€"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Option astreinte de la formule Confort."
+  },
+  {
+    "id": "G-048",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "tarif",
+      "piege"
+    ],
+    "input": {
+      "q": "Nous avons un projet de rénovation : combien de temps un devis reste-t-il valable ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "deux mois"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "« projet » dans une question simple."
+  },
+  {
+    "id": "G-049",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "litige",
+      "regle_suivante"
+    ],
+    "input": {
+      "q": "Dans quel délai une facture peut-elle être contestée ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_litiges_facturation.md",
+      "conditions_generales_maintenance.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "30 jours"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Vocabulaire de litige sans montant : pas d'automatisation, réponse documentaire."
+  },
+  {
+    "id": "G-050",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "litige",
+      "regle_suivante"
+    ],
+    "input": {
+      "q": "Sous combien de jours ouvrés l'avoir est-il émis pour un litige standard ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_litiges_facturation.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "10 jours ouvres"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Délai d'émission de l'avoir."
+  },
+  {
+    "id": "G-051",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "litige",
+      "regle_suivante"
+    ],
+    "input": {
+      "q": "Que se passe-t-il si une même contestation est déposée deux fois ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_litiges_facturation.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "ticket existant"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Règle des doublons."
+  },
+  {
+    "id": "G-052",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "litige",
+      "regle_suivante"
+    ],
+    "input": {
+      "q": "Je conteste ma dernière facture, comment dois-je procéder ?",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_litiges_facturation.md",
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "montant conteste"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Client connu mais aucun montant : RG-03 ne s'applique pas."
+  },
+  {
+    "id": "G-053",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "litige",
+      "regle_suivante",
+      "client_inconnu"
+    ],
+    "input": {
+      "q": "Je conteste la facture de 150 € reçue la semaine dernière.",
+      "client_id": "C-99",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_litiges_facturation.md",
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Petit montant mais client inconnu (C-99) : RG-03 ne s'applique pas."
+  },
+  {
+    "id": "G-054",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "litige",
+      "regle_suivante",
+      "plusieurs_montants"
+    ],
+    "input": {
+      "q": "On m'a facturé 480 € au lieu des 300 € prévus au devis : je conteste cette facture.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_litiges_facturation.md",
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Deux montants différents dans le texte : montant non résolu, pas d'automatisation."
+  },
+  {
+    "id": "G-055",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "conditions_generales"
+    ],
+    "input": {
+      "q": "Le contrat de maintenance est-il renouvelé par tacite reconduction ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "conditions_generales_maintenance.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "sans tacite reconduction"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Durée et renouvellement."
+  },
+  {
+    "id": "G-056",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "conditions_generales"
+    ],
+    "input": {
+      "q": "Les dommages dus au gel ou au vandalisme sont-ils couverts par le contrat ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "conditions_generales_maintenance.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "ne sont pas couverts"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Exclusions."
+  },
+  {
+    "id": "G-057",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "conditions_generales"
+    ],
+    "input": {
+      "q": "De combien la redevance annuelle peut-elle être révisée chaque année ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "conditions_generales_maintenance.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "3 ?%"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Révision de la redevance."
+  },
+  {
+    "id": "G-058",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "astreinte"
+    ],
+    "input": {
+      "q": "Quelles périodes l'astreinte couvre-t-elle en dehors des heures ouvrées ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_astreinte.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "18 h a 8 h"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Périmètre de l'astreinte."
+  },
+  {
+    "id": "G-059",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "astreinte"
+    ],
+    "input": {
+      "q": "Dans quel délai le technicien d'astreinte rappelle-t-il le client ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_astreinte.md",
+      "note_service_astreinte_hiver.eml"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "20 minutes"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Délai de rappel en astreinte."
+  },
+  {
+    "id": "G-060",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "astreinte"
+    ],
+    "input": {
+      "q": "Comment est traitée une demande P3 reçue pendant l'astreinte ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_astreinte.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "premier jour ouvre"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Les demandes P3 ne déclenchent pas de déplacement d'astreinte."
+  },
+  {
+    "id": "G-061",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "faq"
+    ],
+    "input": {
+      "q": "Où figure l'identifiant du client ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "sur chaque facture"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Identification du client."
+  },
+  {
+    "id": "G-062",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "faq"
+    ],
+    "input": {
+      "q": "Jusqu'à quel montant le responsable d'exploitation peut-il accorder un geste commercial ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "150 ?€"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Geste commercial ; « montant » sans vocabulaire de litige."
+  },
+  {
+    "id": "G-063",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "faq",
+      "piege"
+    ],
+    "input": {
+      "q": "Combien de tickets le gestionnaire crée-t-il pour une demande qui concerne plusieurs sites ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "un ticket par site"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Le mot « ticket » dans une question simple."
+  },
+  {
+    "id": "G-064",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "faq"
+    ],
+    "input": {
+      "q": "Dans quel délai le gestionnaire SAV rappelle-t-il un client qui a laissé un message ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "2 heures ouvrees"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Rappel après un message sur le répondeur."
+  },
+  {
+    "id": "G-065",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "donnees",
+      "piege"
+    ],
+    "input": {
+      "q": "Combien de temps les rapports d'intervention sont-ils conservés après la clôture du ticket ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "politique_donnees_personnelles.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "3 ans"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Durée de conservation ; le mot « ticket » ne déclenche pas l'agent."
+  },
+  {
+    "id": "G-066",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "donnees"
+    ],
+    "input": {
+      "q": "Où les données sont-elles hébergées ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "politique_donnees_personnelles.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "union europeenne"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hébergement ; « données » seul n'est pas un sujet sensible."
+  },
+  {
+    "id": "G-067",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "donnees"
+    ],
+    "input": {
+      "q": "Quelles informations l'assistant masque-t-il dans une demande ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "politique_donnees_personnelles.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "iban"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Masquage des données dans l'assistant."
+  },
+  {
+    "id": "G-068",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "contrat",
+      "regle_suivante"
+    ],
+    "input": {
+      "q": "Quelle redevance annuelle est prévue par notre contrat et comment est-elle facturée ?",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "contrat_C-12.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "4 800 ?€"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Le client C-12 interroge son propre contrat ; « facturée » sans contestation ni montant ne déclenche pas RG-03."
+  },
+  {
+    "id": "G-069",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "contrat"
+    ],
+    "input": {
+      "q": "L'astreinte du week-end est-elle incluse dans notre contrat ?",
+      "client_id": "C-27",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "contrat_C-27.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "astreinte incluse 24 h/24"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Le client C-27 interroge son propre contrat."
+  },
+  {
+    "id": "G-070",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "contrat",
+      "client_dans_le_texte",
+      "piege"
+    ],
+    "input": {
+      "q": "Quelle est la formule du contrat C-27 et jusqu'à quelle date est-il valable ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "contrat_C-27.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "premium",
+      "28 fevrier 2029"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Client identifié par le texte uniquement ; « et » dans une question simple."
+  },
+  {
+    "id": "G-071",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "contrat",
+      "contrat_echu"
+    ],
+    "input": {
+      "q": "Notre contrat a-t-il été renouvelé ou est-il échu ?",
+      "client_id": "C-34",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "contrat_C-34.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "30 juin 2026"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Contrat échu : la réponse vient du contrat C-34 (date fixe, indépendante du jour)."
+  },
+  {
+    "id": "G-072",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "pdf"
+    ],
+    "input": {
+      "q": "Jusqu'à quand un rendez-vous peut-il être reporté ou annulé gratuitement ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "guide_planification_interventions.pdf"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "24 heures ouvrees"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Report et annulation (PDF, page 2)."
+  },
+  {
+    "id": "G-073",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "pdf"
+    ],
+    "input": {
+      "q": "Combien d'interventions par jour un technicien réalise-t-il au plus, trajets compris ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "guide_planification_interventions.pdf"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "cinq interventions"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Créneaux (PDF, page 1)."
+  },
+  {
+    "id": "G-074",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "pdf"
+    ],
+    "input": {
+      "q": "De quelle date à quelle date s'étend la période de chauffe ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "guide_planification_interventions.pdf"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "1er octobre au 30 avril"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Période de chauffe (PDF, page 3)."
+  },
+  {
+    "id": "G-075",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "pdf",
+      "piege"
+    ],
+    "input": {
+      "q": "Quand le planning de la semaine suivante est-il figé ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "guide_planification_interventions.pdf"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "jeudi a 16 h"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "« planning » n'est pas une demande de planification."
+  },
+  {
+    "id": "G-076",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "eml"
+    ],
+    "input": {
+      "q": "Combien de techniciens sont d'astreinte chaque semaine pendant la période hivernale ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "note_service_astreinte_hiver.eml"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "trois techniciens"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Note de service : effectif renforcé."
+  },
+  {
+    "id": "G-077",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "eml"
+    ],
+    "input": {
+      "q": "À quelles dates s'applique le dispositif hivernal de l'astreinte ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "note_service_astreinte_hiver.eml"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "1er novembre 2026",
+      "31 mars 2027"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Note de service : période du dispositif."
+  },
+  {
+    "id": "G-078",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "semantic",
+      "tarif"
+    ],
+    "input": {
+      "q": "Combien coûte la venue d'un technicien un samedi ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "211,95"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Paraphrase de l'exemple de calcul « intervention d'une heure un samedi », sans les mots « intervention », « majoration » ni « week-end ». Sans recherche vectorielle, l'extrait cité peut manquer le calcul."
+  },
+  {
+    "id": "G-079",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "semantic",
+      "sav"
+    ],
+    "input": {
+      "q": "Notre contrat de maintenance est terminé : pouvez-vous encore intervenir chez nous ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_sav.md",
+      "conditions_generales_maintenance.md",
+      "faq_gestionnaires.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "devis prealable"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Paraphrase de « contrat expiré » / « après l'échéance » : devis préalable. Le fait attendu demande une reformulation par LLM ; le mode extractif peut le manquer."
+  },
+  {
+    "id": "G-080",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "semantic",
+      "litige"
+    ],
+    "input": {
+      "q": "Combien de temps ai-je pour signaler une erreur sur une somme qui m'a été réclamée ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_litiges_facturation.md",
+      "conditions_generales_maintenance.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "30 jours"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Paraphrase du délai de contestation, sans « facture » ni « contester »."
+  },
+  {
+    "id": "G-081",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "semantic",
+      "astreinte"
+    ],
+    "input": {
+      "q": "Si j'appelle la nuit, au bout de combien de temps un technicien me recontacte-t-il ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "procedure_astreinte.md",
+      "note_service_astreinte_hiver.eml"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "20 minutes"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Paraphrase du délai de rappel en astreinte."
+  },
+  {
+    "id": "G-082",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "semantic",
+      "pdf"
+    ],
+    "input": {
+      "q": "Puis-je décaler une visite au dernier moment sans rien payer ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "guide_planification_interventions.pdf"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "24 heures ouvrees"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Paraphrase du report gratuit d'un rendez-vous. Le fait attendu demande une reformulation par LLM ; le mode extractif peut le manquer."
+  },
+  {
+    "id": "G-083",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_sujet"
+    ],
+    "input": {
+      "q": "Quelle est la recette de la tarte aux pommes ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Sans rapport avec le corpus."
+  },
+  {
+    "id": "G-084",
+    "split": "test",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_sujet"
+    ],
+    "input": {
+      "q": "Qui a remporté la Coupe du monde de football en 2018 ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Sans rapport avec le corpus."
+  },
+  {
+    "id": "G-085",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_sujet"
+    ],
+    "input": {
+      "q": "Pouvez-vous me recommander un restaurant italien près de la gare ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Sans rapport avec le corpus."
+  },
+  {
+    "id": "G-086",
+    "split": "test",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_sujet"
+    ],
+    "input": {
+      "q": "Faut-il un visa touristique pour voyager au Japon ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Sans rapport avec le corpus."
+  },
+  {
+    "id": "G-087",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_sujet"
+    ],
+    "input": {
+      "q": "Quelle est la capitale de l'Australie ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Sans rapport avec le corpus."
+  },
+  {
+    "id": "G-088",
+    "split": "test",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_sujet",
+      "proche_du_metier"
+    ],
+    "input": {
+      "q": "Installez-vous des bornes de recharge pour voitures ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Proche du métier mais absent du corpus : aucune réponse ne doit être inventée."
+  },
+  {
+    "id": "G-089",
+    "split": "dev",
+    "category": "pii",
+    "tags": [
+      "pii",
+      "tarif"
+    ],
+    "input": {
+      "q": "Merci de me répondre à gestion.immeuble@example.com ou au 06 39 98 12 34 : quelle est la majoration appliquée le week-end sur le déplacement ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "35 ?%"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [
+      "EMAIL",
+      "TEL"
+    ],
+    "note": "Adresse électronique et téléphone fictifs dans une question documentaire."
+  },
+  {
+    "id": "G-090",
+    "split": "test",
+    "category": "pii",
+    "tags": [
+      "pii",
+      "rg03"
+    ],
+    "input": {
+      "q": "Je conteste la facture de 180 € (client C-12). Merci de rembourser sur l'IBAN FR76 3000 6000 0112 3456 7890 189.",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "automation",
+    "expected_final_route": "automation",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "rg-03",
+      "t-\\d{6}"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [
+      "IBAN"
+    ],
+    "note": "IBAN d'exemple (valide mod 97) : il ne doit ni être pris pour un téléphone, ni apparaître dans le ticket."
+  },
+  {
+    "id": "G-091",
+    "split": "dev",
+    "category": "pii",
+    "tags": [
+      "pii",
+      "rg05"
+    ],
+    "input": {
+      "q": "La chaudière est en panne, merci de rappeler le gardien au +33 6 39 98 45 67.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [
+      "contrat_C-12.md",
+      "procedure_sav.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [
+      "TEL"
+    ],
+    "note": "Téléphone au format international."
+  },
+  {
+    "id": "G-092",
+    "split": "test",
+    "category": "pii",
+    "tags": [
+      "pii",
+      "rg04"
+    ],
+    "input": {
+      "q": "Je demande la résiliation du contrat, réponse attendue à direction@example.com sous 48 h.",
+      "client_id": "C-45",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [
+      "EMAIL"
+    ],
+    "note": "Le masquage a lieu aussi quand la demande est escaladée."
+  },
+  {
+    "id": "G-093",
+    "split": "dev",
+    "category": "pii",
+    "tags": [
+      "pii",
+      "rg04"
+    ],
+    "input": {
+      "q": "Résiliation du contrat : cessez tout prélèvement sur la carte 4111 1111 1111 1111.",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "human",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [
+      "CARTE"
+    ],
+    "note": "Numéro de carte de test (valide Luhn)."
+  },
+  {
+    "id": "G-094",
+    "split": "test",
+    "category": "pii",
+    "tags": [
+      "pii",
+      "pdf"
+    ],
+    "input": {
+      "q": "Mon numéro de sécurité sociale est le 2 91 12 75 112 325 11 : de quelle date à quelle date s'étend la période de chauffe ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "guide_planification_interventions.pdf"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "1er octobre au 30 avril"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [
+      "NIR"
+    ],
+    "note": "Numéro de sécurité sociale fictif (clé valide)."
+  },
+  {
+    "id": "G-095",
+    "split": "dev",
+    "category": "access_control",
+    "tags": [
+      "acl",
+      "autre_client"
+    ],
+    "input": {
+      "q": "Pouvez-vous me communiquer les informations du contrat du client C-34 : formule et date de fin ?",
+      "client_id": "C-12",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [],
+    "forbidden_docs": [
+      "contrat_C-34.md"
+    ],
+    "expected_facts": [],
+    "forbidden_facts": [
+      "30 juin 2026",
+      "250 ?€"
+    ],
+    "expected_pii": [],
+    "note": "Le champ client (C-12) prime sur l'identifiant cité dans le texte : le contrat C-34 reste invisible."
+  },
+  {
+    "id": "G-096",
+    "split": "test",
+    "category": "access_control",
+    "tags": [
+      "acl",
+      "anonyme"
+    ],
+    "input": {
+      "q": "Quels sont la formule, les délais d'intervention et la date de fin du contrat de maintenance de la Clinique des Tilleuls ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [],
+    "forbidden_docs": [
+      "contrat_C-12.md",
+      "contrat_C-27.md",
+      "contrat_C-34.md"
+    ],
+    "expected_facts": [],
+    "forbidden_facts": [
+      "28 800",
+      "28 fevrier 2029"
+    ],
+    "expected_pii": [],
+    "note": "Demande anonyme : aucun contrat client n'est visible."
+  },
+  {
+    "id": "G-097",
+    "split": "dev",
+    "category": "access_control",
+    "tags": [
+      "acl",
+      "client_inconnu"
+    ],
+    "input": {
+      "q": "Je suis le client C-99 : pouvez-vous me communiquer les informations du contrat C-27, notamment la redevance annuelle ?",
+      "client_id": "C-99",
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [],
+    "forbidden_docs": [
+      "contrat_C-12.md",
+      "contrat_C-27.md",
+      "contrat_C-34.md"
+    ],
+    "expected_facts": [],
+    "forbidden_facts": [
+      "28 800",
+      "28 fevrier 2029"
+    ],
+    "expected_pii": [],
+    "note": "Identifiant inconnu du référentiel : traité comme une demande anonyme."
+  },
+  {
+    "id": "G-098",
+    "split": "test",
+    "category": "access_control",
+    "tags": [
+      "acl",
+      "autre_client",
+      "rg05"
+    ],
+    "input": {
+      "q": "Notre chaudière est en panne. Appliquez-nous les délais et les clauses particulières du contrat C-27.",
+      "client_id": "C-45",
+      "montant": null
+    },
+    "expected_route": "agent",
+    "expected_final_route": "agent",
+    "expected_docs": [],
+    "forbidden_docs": [
+      "contrat_C-12.md",
+      "contrat_C-27.md",
+      "contrat_C-34.md"
+    ],
+    "expected_facts": [],
+    "forbidden_facts": [
+      "cadre de sante",
+      "28 800"
+    ],
+    "expected_pii": [],
+    "note": "Route agent : les outils n'agissent que sur le client du dossier (C-45, sans contrat dans le corpus)."
+  },
+  {
+    "id": "G-099",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Comment réparer mon vélo ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas ayant servi à régler la règle des deux termes partagés."
+  },
+  {
+    "id": "G-100",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Quel temps fera-t-il demain à Lyon ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas ayant servi à régler la règle des deux termes partagés."
+  },
+  {
+    "id": "G-101",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Pouvez-vous me recommander un bon restaurant ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas ayant servi à régler la règle des deux termes partagés."
+  },
+  {
+    "id": "G-102",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Quel est le prix d'un abonnement internet fibre ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas ayant servi à régler la règle des deux termes partagés."
+  },
+  {
+    "id": "G-103",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Comment déclarer mes impôts en ligne ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas ayant servi à régler la règle des deux termes partagés."
+  },
+  {
+    "id": "G-104",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Vendez-vous des climatiseurs Daikin et à quel prix ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas ayant servi à régler la règle des deux termes partagés."
+  },
+  {
+    "id": "G-105",
+    "split": "dev",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Qui a gagné la coupe du monde de football en 2018 ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas ayant servi à régler la règle des deux termes partagés."
+  },
+  {
+    "id": "G-106",
+    "split": "test",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Quels sont les horaires d'ouverture de la piscine municipale ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas écrit après le réglage, non consulté avant la mesure."
+  },
+  {
+    "id": "G-107",
+    "split": "test",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Comment obtenir le remboursement d'un billet de train annulé ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas écrit après le réglage, non consulté avant la mesure."
+  },
+  {
+    "id": "G-108",
+    "split": "test",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Quelle est la capitale de l'Australie ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas écrit après le réglage, non consulté avant la mesure."
+  },
+  {
+    "id": "G-109",
+    "split": "test",
+    "category": "out_of_scope",
+    "tags": [
+      "hors_perimetre",
+      "mot_commun"
+    ],
+    "input": {
+      "q": "Pouvez-vous me donner le tarif d'une place de parking à l'aéroport ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "human",
+    "expected_docs": [],
+    "forbidden_docs": [],
+    "expected_facts": [],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Hors périmètre partageant un mot courant avec le corpus : ne doit pas être répondu par un extrait. Cas écrit après le réglage, non consulté avant la mesure."
+  },
+  {
+    "id": "G-110",
+    "split": "dev",
+    "category": "rag",
+    "tags": [
+      "tarif",
+      "titre_document"
+    ],
+    "input": {
+      "q": "Quels sont les tarifs de nuit ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "50 ?%"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Question courte : le passage dit « majoration de nuit », seul le titre du document parle de tarifs. Cas trouvé au test de fumée, ayant servi au réglage."
+  },
+  {
+    "id": "G-111",
+    "split": "test",
+    "category": "rag",
+    "tags": [
+      "tarif",
+      "titre_document"
+    ],
+    "input": {
+      "q": "Quel est le tarif d'un jour férié ?",
+      "client_id": null,
+      "montant": null
+    },
+    "expected_route": "rag",
+    "expected_final_route": "rag",
+    "expected_docs": [
+      "grille_tarifaire_2026.md"
+    ],
+    "forbidden_docs": [],
+    "expected_facts": [
+      "100 ?%"
+    ],
+    "forbidden_facts": [],
+    "expected_pii": [],
+    "note": "Même forme que G-110, écrit après le réglage et non consulté avant la mesure."
+  }
+]
