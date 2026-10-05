@@ -170,3 +170,14 @@ Prototype personnel, développé avec Claude Code comme assistant de programmati
 passé par une revue indépendante dont les constats ont été corrigés ou inscrits comme
 limites dans l'évaluation. Les règles, l'architecture et les arbitrages sont décrits dans
 `docs/` ; les chiffres de ce README sont reproduits par les commandes ci-dessus.
+
+## In English
+
+Novare DossierOps is a prototype that handles customer requests for a fictional heating
+and air-conditioning maintenance company. Deterministic business rules triage each
+request, which then takes the simplest route that fits: a rule with no AI at all, an
+answer quoted from the company's documents with its sources, an agent that prepares a
+case file and proposes a ticket for a person to approve, or a hand-over to a person.
+Without an API key it still answers, by quoting passages as they are; the LLM calls were
+tested with a simulated model only. The results above are measured on 136 invented
+cases, without an LLM. The documentation is in French.
