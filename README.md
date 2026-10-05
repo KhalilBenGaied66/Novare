@@ -1,5 +1,7 @@
 # Novare DossierOps
 
+[![CI](https://github.com/KhalilBenGaied66/Novare/actions/workflows/ci.yml/badge.svg)](https://github.com/KhalilBenGaied66/Novare/actions/workflows/ci.yml)
+
 Assistant de traitement des demandes clients pour une entreprise de maintenance
 (chauffage, ventilation, climatisation). Chaque demande est d'abord triée par des règles
 métier, puis traitée par la voie la plus simple possible : une règle sans IA, une réponse
