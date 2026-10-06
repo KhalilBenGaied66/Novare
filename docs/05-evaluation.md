@@ -6,7 +6,7 @@
 fait passer chaque cas de `evals/golden_set.json` par le pipeline réel (`triage` puis
 `handle_ask`, comme une requête d'API), sur un index reconstruit à partir du corpus et une
 base de données temporaire. Un rapport par configuration est écrit dans `evals/reports/`
-(`hybrid`, `bm25`).
+(`hybrid`, `bm25`, et `hybrid-llm` quand un modèle rédige).
 
 Chaque cas porte ce qui est attendu :
 
@@ -78,13 +78,113 @@ du recoupement de mots entre la question et les passages : les passages cités d
 souvent d'un mode à l'autre sans que les contrôles changent de résultat. L'apport des
 vecteurs sur la réponse finale ne se verra qu'avec un modèle qui reformule.
 
-**Les réponses rédigées par un modèle ne sont pas mesurées.** Aucune clé n'était
-disponible. Avec une clé : `python -m app.eval.run_eval --judge` ajoute un contrôle de
-fidélité par un second modèle (testé ici avec un modèle simulé uniquement).
+**Les réponses rédigées par un modèle sont mesurées à part** : section suivante.
+
+## Avec un modèle
+
+`make eval-llm` refait la même évaluation en laissant des modèles rédiger. Ce sont deux
+modèles ouverts, exécutés localement par Ollama sur une carte graphique de 16 Go :
+Qwen 3.5 à 4 milliards de paramètres pour les réponses documentaires, Qwen 3.5 à
+9 milliards pour l'agent et pour le juge de fidélité. Recherche hybride, température 0,
+raisonnement désactivé, contexte de 16 384 tokens. Rapport :
+[`evals/reports/hybrid-llm.md`](../evals/reports/hybrid-llm.md). Colonnes : tous les cas
+/ dev / test.
+
+| Mesure | Sans modèle | Avec les modèles locaux |
+|---|---|---|
+| Voie finale | 0,904 / 0,882 / 0,941 | 0,919 / 0,906 / 0,941 |
+| Document attendu cité (69 demandes à répondre) | 0,899 / 0,867 / 0,958 | 1,00 / 1,00 / 1,00 |
+| Faits attendus dans la réponse (70 cas) | 0,871 / 0,864 / 0,885 | 0,871 / 0,841 / 0,923 |
+| Réponse jugée fidèle aux sources (70 réponses jugées) | — | 0,986 / 1,00 / 0,955 |
+| Documents interdits atteints, faits interdits dans la réponse | 0 | 0 |
+| Cas en échec | 20 | 20 |
+
+Le tri et la recherche ne dépendent pas du modèle : leurs lignes sont celles du tableau
+précédent.
+
+**Ce que le modèle change.** Il cite un document attendu dans toutes les demandes à
+répondre, là où le mode extraits en manquait 7 sur 69 : au lieu de retenir les phrases qui
+partagent le plus de mots avec la question, il lit les quatre sources et répond à la
+question posée. 9 cas en échec sans modèle réussissent (G-079, G-080, G-082, G-120, G-127,
+G-128, G-129, G-130, G-134). En sens inverse, 9 cas qui réussissaient échouent (G-024,
+G-025, G-033, G-037, G-044, G-055, G-069, G-104, G-113), le plus souvent parce qu'un fait
+attendu manque dans sa formulation.
+
+**L'agent conduit par le modèle aboutit dans 15 à 17 dossiers sur 18**, selon l'exécution.
+Dans les autres il n'a pas rendu de réponse finale dans les six tours autorisés ; le plan
+fixe prend le relais et le dossier reçoit quand même sa proposition de ticket.
+
+**Hors périmètre.** Quand les sources ne répondent pas à la question, le modèle le dit
+et la demande est transmise (6 cas). Il répond encore à 6 questions hors périmètre qui
+partagent du vocabulaire avec un document.
+
+**Temps de réponse.** 1,1 seconde pour une question documentaire, 18 secondes pour un
+dossier (médianes, sur cette machine). Sans modèle : quelques dizaines de millisecondes.
+
+**D'une exécution à l'autre.** Deux exécutions identiques ne donnent pas exactement les
+mêmes réponses, même à température 0 : les mêmes 20 cas échouent dans les deux, et l'agent
+a conclu seul 15 dossiers dans la première, 17 dans la seconde. Le rapport déposé est
+celui de la seconde.
+
+Les 20 cas en échec avec le modèle :
+
+| Cas | Demande | Contrôle en échec |
+|---|---|---|
+| G-024 (dev) | « La chaudière de l'immeuble est en panne depuis ce matin, merci d'envoyer un technicien. » | faits absents de la réponse : ['8 h ouvrees', 'priorite p2'] |
+| G-025 (dev) | « Fuite d'eau importante sur le réseau de chauffage du bloc technique, intervention urgente de… » | faits absents de la réponse : ['24 h/24'] |
+| G-033 (dev) | « Notre pompe à chaleur ne marche plus depuis hier soir. » | faits absents de la réponse : ['client non identifie'] |
+| G-037 (dev) | « Quel est le délai d'intervention P2 pour la formule Confort ? » | faits absents de la réponse : ['8 h ouvrees'] |
+| G-044 (dev) | « Le forfait diagnostic est-il déduit du devis s'il est accepté ? » | faits absents de la réponse : ['120 ?€'] |
+| G-055 (dev) | « Le contrat de maintenance est-il renouvelé par tacite reconduction ? » | faits absents de la réponse : ['sans tacite reconduction'] |
+| G-069 (test) | « L'astreinte du week-end est-elle incluse dans notre contrat ? » | faits absents de la réponse : ['astreinte incluse 24 h/24'] |
+| G-078 (dev) | « Combien coûte la venue d'un technicien un samedi ? » | faits absents de la réponse : ['211,95'] |
+| G-081 (test) | « Si j'appelle la nuit, au bout de combien de temps un technicien me recontacte-t-il ? » | faits absents de la réponse : ['rappelle le client dans les 20 minutes/rappel du client.*20 minutes'] |
+| G-104 (dev) | « Vendez-vous des climatiseurs Daikin et à quel prix ? » | route finale rag, attendue human |
+| G-113 (dev) | « Merci pour la facture de 120 €, bien reçue. » | route finale rag, attendue human |
+| G-114 (dev) | « Je ne conteste pas la facture de 120 €, je demande seulement un duplicata. » | route finale rag, attendue human |
+| G-122 (dev) | « Combien coûte un déplacement en taxi de Lyon à Vénissieux ? » | route finale rag, attendue human |
+| G-123 (dev) | « Quel est le délai de livraison d'une pièce commandée sur Amazon ? » | route finale rag, attendue human |
+| G-124 (dev) | « Quelle est la durée de garantie de mon lave-vaisselle ? » | route finale rag, attendue human |
+| G-125 (dev) | « Quel est le tarif d'une nuit d'hôtel à Lyon le week-end ? » | route finale rag, attendue human |
+| G-126 (dev) | « Quels sont les jours fériés en France en 2026 ? » | route finale rag, attendue human |
+| G-131 (test) | « Nous comptons arrêter notre contrat à la fin de l'année. » | route rag, attendue human ; route finale rag, attendue human |
+| G-132 (test) | « Le chauffe-eau fait un bruit de claquement et l'eau reste tiède. » | route rag, attendue agent ; route finale rag, attendue agent |
+| G-133 (test) | « Suite à votre relance, je vous confirme le paiement de la facture de 310 €. » | route finale rag, attendue human ; réponse jugée non fidèle aux sources |
+
+### Ce que la première exécution réelle a trouvé
+
+Deux défauts que les tests, faits avec un modèle simulé, ne pouvaient pas montrer :
+
+1. **Un outil sans argument faisait échouer la requête.** Quand Qwen 3.5 appelle
+   `get_contract`, qui ne prenait aucun argument, il écrit un appel mal formé et le
+   serveur répond à toute la requête par une erreur. Quatre dossiers sur dix-huit
+   repassaient pour cela par le plan fixe. L'outil déclare désormais un paramètre
+   facultatif, qu'il ignore ; un test vérifie qu'aucun outil n'est sans paramètre.
+2. **Un modèle qui raisonne dépense sa réponse à raisonner.** Avec le raisonnement
+   activé, qui est le réglage par défaut du serveur pour ce modèle, la réponse
+   documentaire, limitée à 600 tokens, revenait tronquée et le garde-fou la remplaçait
+   par des extraits.
+
+Et une marge trop faible : la fenêtre de contexte par défaut du serveur est de
+4 096 tokens, réponse comprise, quand l'historique d'un dossier atteint 3 000 tokens au
+cinquième tour. Elle est portée à 16 384.
+
+Le raisonnement et le contexte se règlent sans code propre à un fournisseur :
+`LLM_EXTRA_PARAMS` ajoute à chaque appel les paramètres dont un modèle a besoin (voir
+`.env.example`).
+
+### Limites de cette mesure
+
+- Une seule famille de modèles, et le juge en fait partie : il n'a pas été comparé à un
+  jugement humain.
+- Les fournisseurs hébergés (Mistral, Anthropic) passent par le même code et n'ont pas
+  été appelés.
+- Le jeu de cas a été écrit pour le mode sans modèle : il ne contient ni conversation à
+  plusieurs tours ni question qui demande de rapprocher plusieurs documents.
 
 ## Cas en échec
 
-20 cas en recherche hybride, 21 en BM25 (G-034 en plus).
+Sans modèle : 20 cas en recherche hybride, 21 en BM25 (G-034 en plus).
 
 **Paraphrases (5).** Le bon document est parmi les sources ; c'est le choix du passage à
 citer qui échoue, faute de mots communs.
@@ -163,7 +263,8 @@ unitaires, pas par ces seuils.
 - Corpus de 12 documents et 118 passages : rien n'est dit sur le comportement à
   l'échelle d'une vraie base documentaire.
 - Cas écrits par l'auteur du système et par une revue, sans courriers réels.
-- Pas de mesure du mode LLM, ni de l'agent piloté par un modèle.
+- Le mode LLM et l'agent piloté par un modèle sont mesurés avec une seule famille de
+  modèles locaux (voir « Avec un modèle »).
 - Les faits attendus sont vérifiés par expressions régulières : une réponse juste
   formulée autrement serait comptée fausse, et une expression trop large peut se
   trouver dans une phrase qui ne répond pas (le cas G-081 a été resserré pour cette

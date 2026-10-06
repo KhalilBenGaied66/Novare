@@ -2,10 +2,16 @@
 
 [![CI](https://github.com/KhalilBenGaied66/Novare/actions/workflows/ci.yml/badge.svg)](https://github.com/KhalilBenGaied66/Novare/actions/workflows/ci.yml)
 
+*English summary [at the end of this page](#in-english).*
+
 Assistant de traitement des demandes clients pour une entreprise de maintenance
 (chauffage, ventilation, climatisation). Chaque demande est d'abord triée par des règles
 métier, puis traitée par la voie la plus simple possible : une règle sans IA, une réponse
 documentaire citée, un agent qui prépare un dossier, ou une transmission à une personne.
+
+**Pile technique.** Python 3.11, FastAPI, LangGraph, LiteLLM (modèles hébergés, ou locaux
+via Ollama), recherche BM25 et vecteurs (fastembed, Qdrant), SQLAlchemy (SQLite ou
+PostgreSQL), Streamlit, Docker, GitHub Actions.
 
 > **Contexte.** Novare Services est une entreprise fictive. Les documents, les clients
 > et le jeu d'évaluation sont inventés pour ce prototype. Aucun utilisateur réel ne l'a
@@ -29,17 +35,41 @@ Trois principes structurent l'ensemble :
   sans citation, erreur interne : la demande est transmise. L'agent ne crée jamais de
   ticket ; il le propose, et un gestionnaire le valide en confirmant la priorité. Seule
   la règle des petits litiges crée un ticket sans validation.
-- **Sans clé d'API, le système répond quand même.** Les réponses documentaires citent
-  alors les passages tels quels et l'agent suit un plan fixe. Avec une clé, un modèle
-  rédige, sous les mêmes contrôles.
+- **Sans modèle, le système répond quand même.** Les réponses documentaires citent
+  alors les passages tels quels et l'agent suit un plan fixe. Avec un modèle, hébergé ou
+  local, celui-ci rédige sous les mêmes contrôles ; s'il échoue, la voie sans modèle
+  reprend la main.
+
+Le parcours d'une demande ([docs/03-architecture.md](docs/03-architecture.md)) :
+
+```mermaid
+flowchart TD
+    A[POST /api/v1/ask] --> B[Masquage des données personnelles]
+    B --> C{Tri par règles<br/>sans modèle}
+    C -->|RG-04, RG-03b| H[Transmission à un gestionnaire]
+    C -->|RG-03| AU[Ticket standard<br/>détection de doublon]
+    C -->|DEFAULT| R[Recherche hybride]
+    C -->|RG-05| AG[Agent à outils]
+    R --> G{Confiance suffisante ?}
+    G -->|non| H
+    G -->|oui| GEN[Réponse citée<br/>LLM ou extraits]
+    GEN -->|sans citation valide| H
+    AG --> P[Brouillon + ticket proposé]
+    P --> V{Validation humaine}
+    V -->|approuvé| T[Ticket créé]
+    AU --> L[(Journal des demandes)]
+    GEN --> L
+    P --> L
+    H --> L
+```
 
 ## État du projet
 
 | | |
 |---|---|
 | **Fonctionne et testé** | Tri par règles, automatisation des petits litiges, recherche hybride (BM25 + vecteurs), réponses citées, agent à outils (LangGraph) avec validation humaine, masquage des données personnelles, contrats réservés au client du champ client (identité déclarée, non authentifiée), API (FastAPI), base de données, interface (Streamlit), évaluation sur 136 cas |
-| **Écrit, testé avec un modèle simulé** | Appels LLM (rédaction des réponses, agent qui choisit ses outils, juge de fidélité). Aucune clé n'était disponible pendant le développement : `scripts/smoke_llm.py` sert à le vérifier avec une vraie clé. |
-| **Écrit, jamais exécuté** | Images Docker et `docker-compose.yml`, PostgreSQL, serveur Qdrant. La CI lance les tests et l'évaluation à chaque push ; son job Docker se lance à la main et n'a jamais tourné. Sur la machine de développement, tout tourne avec SQLite et un index de vecteurs local. |
+| **Exécuté avec de vrais modèles** | Rédaction des réponses, agent qui choisit ses outils, juge de fidélité : mesurés avec deux modèles ouverts exécutés localement (Qwen 3.5 via Ollama), voir les résultats ci-dessous. Les fournisseurs hébergés (Mistral, Anthropic) passent par le même code et n'ont pas été appelés, faute de clé : `scripts/smoke_llm.py` sert à le vérifier. |
+| **Exécuté en CI seulement** | Images Docker et `docker-compose.yml` : à chaque push, la CI lance les tests et l'évaluation, puis démarre la pile complète (API, interface, PostgreSQL 17, Qdrant), pose une question par la recherche hybride et ouvre un ticket. Sur la machine de développement, tout tourne avec SQLite et un index de vecteurs local. |
 | **Non fait** | Authentification des personnes et rôles, file de traitement des demandes transmises, migrations de schéma, purge des données, traces LLM, déploiement, test avec de vrais utilisateurs. Voir [docs/08-industrialisation.md](docs/08-industrialisation.md). |
 
 ## Démarrage
@@ -79,25 +109,31 @@ curl -X POST http://localhost:8000/api/v1/ask \
 Pour utiliser un modèle, copier `.env.example` en `.env` et renseigner la clé du
 fournisseur (`MISTRAL_API_KEY` pour les réponses documentaires, `ANTHROPIC_API_KEY` pour
 l'agent, ou d'autres modèles via `RAG_MODEL` et `AGENT_MODEL`), puis vérifier avec
-`scripts/smoke_llm.py` (commande ci-dessous).
+`scripts/smoke_llm.py` (commande ci-dessous). Sans clé : des modèles ouverts servis
+localement par [Ollama](https://ollama.com), avec le bloc prêt à décommenter de
+`.env.example`.
 
-Avec Docker (non vérifié, voir l'état du projet) : `POSTGRES_PASSWORD=... docker compose up --build`.
+Avec Docker (vérifié en CI) : `POSTGRES_PASSWORD=... docker compose up --build`.
 
 ## Résultats mesurés
 
-Évaluation du pipeline réel sur 136 cas (`evals/golden_set.json`), sans LLM. Rapports :
-[evals/reports/hybrid.md](evals/reports/hybrid.md) et
-[evals/reports/bm25.md](evals/reports/bm25.md).
+Évaluation du pipeline réel sur 136 cas (`evals/golden_set.json`). Les deux premières
+colonnes sont sans LLM. Dans la troisième, les réponses sont rédigées par deux modèles
+ouverts exécutés localement sur une carte graphique grand public (Qwen 3.5, à 4 et
+9 milliards de paramètres, via Ollama). Rapports :
+[hybrid.md](evals/reports/hybrid.md), [bm25.md](evals/reports/bm25.md) et
+[hybrid-llm.md](evals/reports/hybrid-llm.md).
 
-| Mesure | Recherche hybride | BM25 seul |
-|---|---|---|
-| Voie choisie par le tri | 98,5 % | 98,5 % |
-| Voie finale (après garde-fous) | 90,4 % | 90,4 % |
-| Document attendu parmi les 4 sources | 100 % | 98,6 % |
-| Rang du document attendu (MRR, 1 = toujours premier) | 0,89 | 0,86 |
-| Document attendu cité, sur les demandes à répondre | 89,9 % | 88,4 % |
-| Faits attendus présents dans la réponse | 87,1 % | 87,1 % |
-| Document d'un autre client atteint | 0 | 0 |
+| Mesure | Recherche hybride | BM25 seul | Hybride + modèles locaux |
+|---|---|---|---|
+| Voie choisie par le tri | 98,5 % | 98,5 % | 98,5 % |
+| Voie finale (après garde-fous) | 90,4 % | 90,4 % | 91,9 % |
+| Document attendu parmi les 4 sources | 100 % | 98,6 % | 100 % |
+| Rang du document attendu (MRR, 1 = toujours premier) | 0,89 | 0,86 | 0,89 |
+| Document attendu cité, sur les demandes à répondre | 89,9 % | 88,4 % | 100 % |
+| Faits attendus présents dans la réponse | 87,1 % | 87,1 % | 87,1 % |
+| Réponse jugée fidèle aux sources par un second modèle | — | — | 98,6 % (69 sur 70) |
+| Document d'un autre client atteint | 0 | 0 | 0 |
 
 Pour lire ces chiffres :
 
@@ -110,17 +146,27 @@ Pour lire ces chiffres :
   pas : une paraphrase, ou une question hors sujet qui partage deux mots du domaine
   avec un passage, reçoit un extrait qui ne répond pas. 6 des 22 questions hors
   périmètre du jeu sont dans ce cas. Ces limites sont des cas du jeu, pas des oublis.
-- **La qualité des réponses rédigées par un modèle n'est pas mesurée ici.**
+- **Avec un modèle, la réponse cite le bon document, et peut omettre un fait.** Le
+  modèle lit les quatre sources et répond à la question posée : 9 cas en échec sans
+  lui réussissent, 9 autres échouent, le plus souvent pour un fait attendu absent de
+  sa formulation. Au total 20 cas en échec, autant que sans modèle, mais pas les mêmes.
+- **L'agent conduit par le modèle aboutit dans 15 à 17 dossiers sur 18**, selon
+  l'exécution. Dans les autres, le plan fixe prend le relais et le dossier reçoit quand
+  même sa proposition de ticket.
+- **Ces chiffres valent pour une famille de modèles.** Le juge de fidélité en fait partie
+  et n'a pas été comparé à un jugement humain. Deux exécutions identiques ne donnent pas
+  exactement les mêmes réponses, même à température 0.
 
 Détail, méthode, cas en échec et limites : [docs/05-evaluation.md](docs/05-evaluation.md).
 
 Linux / macOS :
 
 ```bash
-make test          # 1 336 tests, hors ligne
+make test          # 1 346 tests, hors ligne
 make eval          # évaluation BM25 sans LLM, avec seuils de non-régression (celle de la CI)
 make eval-hybrid   # la même avec le modèle d'embeddings
-PYTHONPATH=backend python scripts/smoke_llm.py   # vérifie les appels LLM, clé requise
+make eval-llm      # la même avec les modèles locaux (Ollama), réponses rédigées et jugées
+PYTHONPATH=backend python scripts/smoke_llm.py   # vérifie les appels LLM configurés
 ```
 
 Windows (PowerShell) :
@@ -168,8 +214,11 @@ docs/          cadrage, règles, architecture, décisions, évaluation, sécurit
 
 Prototype personnel, développé avec Claude Code comme assistant de programmation, puis
 passé par une revue indépendante dont les constats ont été corrigés ou inscrits comme
-limites dans l'évaluation. Les règles, l'architecture et les arbitrages sont décrits dans
-`docs/` ; les chiffres de ce README sont reproduits par les commandes ci-dessus.
+limites dans l'évaluation. Les appels à un modèle, d'abord testés avec un modèle simulé,
+ont ensuite été exécutés pour de bon avec des modèles locaux : cette première exécution
+a révélé deux défauts, corrigés depuis ([docs/05-evaluation.md](docs/05-evaluation.md)).
+Les règles, l'architecture et les arbitrages sont décrits dans `docs/` ; les chiffres de
+ce README sont reproduits par les commandes ci-dessus.
 
 ## In English
 
@@ -178,6 +227,11 @@ and air-conditioning maintenance company. Deterministic business rules triage ea
 request, which then takes the simplest route that fits: a rule with no AI at all, an
 answer quoted from the company's documents with its sources, an agent that prepares a
 case file and proposes a ticket for a person to approve, or a hand-over to a person.
-Without an API key it still answers, by quoting passages as they are; the LLM calls were
-tested with a simulated model only. The results above are measured on 136 invented
-cases, without an LLM. The documentation is in French.
+Without a model it still answers, by quoting passages as they are. The results above are
+measured on 136 invented cases, first without an LLM, then with answers written by two
+open-weight models running locally (Qwen 3.5 through Ollama); hosted providers go
+through the same code and were not called. The documentation is in French.
+
+## Licence
+
+[MIT](LICENSE).

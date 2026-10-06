@@ -87,7 +87,7 @@ bout de `AGENT_MAX_STEPS` tours.
 | Outil | Effet |
 |---|---|
 | `search_docs(query)` | Recherche hybride, limitée au client du dossier |
-| `get_contract()` | Formule, validité, astreinte du client du dossier |
+| `get_contract(motif)` | Formule, validité, astreinte du client du dossier |
 | `compute_deadline(priority)` | Délai contractuel et échéance en heures ouvrées |
 | `propose_ticket(subject, summary, priority)` | Enregistre une proposition ; ne crée rien |
 
@@ -118,7 +118,11 @@ qualification.
 | Juge de fidélité (évaluation) | `anthropic/claude-haiku-4-5` | `JUDGE_MODEL` |
 
 Le tri n'utilise aucun modèle. Changer de fournisseur revient à changer un nom de modèle
-LiteLLM et la clé correspondante.
+LiteLLM et la clé correspondante. Un modèle local servi par Ollama s'emploie de la même
+façon, sans clé (`ollama_chat/qwen3.5:9b`) ; ce qu'il lui faut en plus, taille du
+contexte, température, raisonnement désactivé, passe par `LLM_EXTRA_PARAMS`. C'est avec
+de tels modèles que les réponses rédigées ont été mesurées
+([05-evaluation.md](05-evaluation.md)).
 
 ## Données stockées
 

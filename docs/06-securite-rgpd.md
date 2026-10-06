@@ -129,7 +129,8 @@ Il n'y a pas de détection d'injection, et la résistance des prompts n'a pas é
 
 ## Non vérifié
 
-- Comportement réel des fournisseurs de modèles (aucune clé pendant le développement).
+- Comportement réel des fournisseurs de modèles hébergés (aucune clé pendant le
+  développement ; seuls des modèles locaux ont été exécutés).
 - Configuration Docker : utilisateur non privilégié, ports liés à `127.0.0.1`, mot de
   passe PostgreSQL exigé sans valeur par défaut (il ne doit contenir ni `@` ni `%`).
-  Écrite, jamais exécutée.
+  Exécutée en CI seulement.

@@ -118,6 +118,13 @@ demander de réécriture.
 (les paramètres d'échantillonnage ne sont jamais envoyés, certains modèles récents les
 refusent).
 
+**Constaté à la première exécution réelle.** Chaque famille de modèles a ses réglages :
+un modèle local a besoin d'une fenêtre de contexte plus grande que celle de son serveur
+et d'un raisonnement désactivé pour les réponses courtes. Ils passent par un seul
+paramètre, `LLM_EXTRA_PARAMS`, sans code propre à un fournisseur. Et un outil sans
+argument, que les modèles hébergés acceptent, fait échouer l'appel d'un modèle ouvert :
+tous les outils déclarent désormais un paramètre.
+
 ## D9. SQLite par défaut, PostgreSQL par configuration
 
 **Choix.** SQLAlchemy, types communs aux deux bases.
@@ -125,7 +132,8 @@ refusent).
 **Pourquoi.** Démarrer sans serveur de base de données ; passer à PostgreSQL par une
 variable d'environnement.
 
-**Coût.** PostgreSQL n'a jamais été exécuté ; pas de migrations.
+**Coût.** Pas de migrations. PostgreSQL n'est exécuté qu'en CI, avec la pile Docker :
+une question journalisée, un ticket créé et relu.
 
 ## Ce qui n'a pas été fait, volontairement
 

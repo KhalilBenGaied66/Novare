@@ -31,12 +31,12 @@ l'usage réel.
 
 | Sujet | État | À faire |
 |---|---|---|
-| Déploiement | Dockerfiles et compose écrits, non exécutés | Les exécuter, puis cible d'hébergement de l'entreprise |
-| Base de données | SQLite testé ; PostgreSQL configuré, non exécuté | Migrations de schéma, sauvegardes |
-| Vecteurs | Fichier local testé ; Qdrant écrit, testé en mémoire seulement | Serveur ou service géré, index sur le champ client |
+| Déploiement | Dockerfiles et compose exécutés en CI à chaque push | Cible d'hébergement de l'entreprise |
+| Base de données | SQLite testé ; PostgreSQL exécuté en CI (une question, un ticket) | Migrations de schéma, sauvegardes, tests complets sur PostgreSQL |
+| Vecteurs | Fichier local testé ; serveur Qdrant exécuté en CI (indexation, une recherche) | Service géré, index sur le champ client |
 | Montée en charge | Un processus, traitement synchrone | File de tâches pour l'agent, limite de débit partagée |
 | Observabilité | Journaux JSON, indicateurs agrégés | Traces des appels LLM, tableaux de bord, alertes |
-| CI | Tests et évaluation à chaque push ; job Docker à lancer à la main, jamais exécuté | Lancer le job Docker, corriger ce qu'il révèle |
+| CI | Tests, évaluation et pile Docker complète à chaque push | Analyse de vulnérabilités, publication des images |
 
 ## Intégrations
 
