@@ -49,8 +49,25 @@ def test_schemas_use_the_openai_function_format():
         assert schema["function"]["description"]
         parameters = schema["function"]["parameters"]
         assert parameters["type"] == "object"
-        assert parameters["required"] == list(parameters["properties"])
+        assert set(parameters["required"]) <= set(parameters["properties"])
         assert parameters["additionalProperties"] is False
+
+
+def test_every_tool_declares_a_parameter():
+    # A call without any argument is one some open-weight models cannot write: Qwen 3.5
+    # served by Ollama writes a malformed one, and the server refuses the request.
+    for schema in TOOL_SCHEMAS:
+        assert schema["function"]["parameters"]["properties"]
+    required = {
+        schema["function"]["name"]: schema["function"]["parameters"]["required"]
+        for schema in TOOL_SCHEMAS
+    }
+    assert required == {
+        "search_docs": ["query"],
+        "get_contract": [],
+        "compute_deadline": ["priority"],
+        "propose_ticket": ["subject", "summary", "priority"],
+    }
 
 
 def test_no_tool_has_a_client_parameter():
@@ -197,6 +214,15 @@ def test_get_contract_active(indexed, friday):
         "Situation au 02/10/2026 : contrat actif\n"
         "Astreinte week-end : non incluse\n"
         "Sites couverts : Chaufferie immeuble Lumière, Lyon 3e"
+    )
+    assert tc.steps == ["get_contract : C-12, formule Confort, contrat actif"]
+
+
+@pytest.mark.parametrize("motif", ["vérifier l'astreinte du client C-34", "", None])
+def test_get_contract_ignores_the_reason_it_is_given(indexed, friday, motif):
+    tc = make_tc("C-12")
+    assert run_tool("get_contract", {"motif": motif}, tc) == run_tool(
+        "get_contract", {}, make_tc("C-12")
     )
     assert tc.steps == ["get_contract : C-12, formule Confort, contrat actif"]
 
@@ -366,7 +392,8 @@ def test_unknown_tool_returns_a_french_error(indexed):
         ("search_docs", {"query": "   "}, "l'argument « query » est obligatoire"),
         ("search_docs", {"query": 42}, "l'argument « query » est obligatoire"),
         ("search_docs", ["contrat"], "les arguments doivent être un objet JSON"),
-        ("get_contract", {"formule": "Premium"}, "non reconnu(s) : formule (attendu : aucun)"),
+        ("get_contract", {"formule": "Premium"}, "non reconnu(s) : formule (attendu : motif)"),
+        ("get_contract", {"motif": 3}, "l'argument « motif » doit être un texte"),
         ("propose_ticket", {"subject": "Panne", "priority": "P1"}, "« summary » est obligatoire"),
         (
             "propose_ticket",

@@ -45,8 +45,13 @@ class ToolContext:
     steps: list[str] = field(default_factory=list)  # French trace lines, no raw user text
 
 
-def _schema(name: str, description: str, properties: dict[str, dict]) -> dict:
-    """One tool in the OpenAI function-calling format. Every parameter is required."""
+def _schema(
+    name: str, description: str, properties: dict[str, dict], optional: tuple[str, ...] = ()
+) -> dict:
+    """One tool in the OpenAI function-calling format.
+
+    A parameter is required unless it is named in `optional`.
+    """
     return {
         "type": "function",
         "function": {
@@ -55,7 +60,7 @@ def _schema(name: str, description: str, properties: dict[str, dict]) -> dict:
             "parameters": {
                 "type": "object",
                 "properties": properties,
-                "required": list(properties),
+                "required": [key for key in properties if key not in optional],
                 "additionalProperties": False,
             },
         },
@@ -80,7 +85,17 @@ TOOL_SCHEMAS: list[dict] = [
         "get_contract",
         "Résumé du contrat du client du dossier : formule, dates de validité, contrat "
         "actif ou échu, astreinte week-end incluse ou non.",
-        {},
+        # Never left without a parameter: some open-weight models cannot write a call
+        # that has none. Qwen 3.5 served by Ollama writes a malformed one, and the server
+        # answers the whole request with an error. This parameter is optional and does
+        # not change the result.
+        {
+            "motif": {
+                "type": "string",
+                "description": "Facultatif : ce que vous cherchez dans le contrat.",
+            }
+        },
+        optional=("motif",),
     ),
     _schema(
         "compute_deadline",
@@ -132,7 +147,7 @@ def _argument_problem(name: str, arguments: dict) -> str | None:
     """French description of the first problem in `arguments`, or None when they are valid.
 
     The check reads the schema sent to the model, so the two cannot drift apart.
-    Every parameter of every tool is a required, non-empty string.
+    Every parameter is a string; a required one must not be empty.
     """
     if not isinstance(arguments, dict):
         return "les arguments doivent être un objet JSON"
@@ -145,6 +160,10 @@ def _argument_problem(name: str, arguments: dict) -> str | None:
         return f"argument(s) non reconnu(s) : {', '.join(unknown)} (attendu : {expected})"
     for key, spec in properties.items():
         value = arguments.get(key)
+        if key not in _REQUIRED[name]:
+            if value is not None and not isinstance(value, str):
+                return f"l'argument « {key} » doit être un texte"
+            continue
         if not isinstance(value, str) or not value.strip():
             return f"l'argument « {key} » est obligatoire (texte non vide)"
         if "enum" in spec and value not in spec["enum"]:
@@ -197,7 +216,8 @@ def _format_source(number: int, result: RetrievedChunk) -> str:
     return f"{header}\n{guardrails.neutralize_tags(chunk.text).strip()}"
 
 
-def _get_contract(tc: ToolContext) -> str:
+def _get_contract(tc: ToolContext, motif: str | None = None) -> str:
+    """`motif` is accepted and not used: see the schema of the tool."""
     client = tc.client
     if client is None:
         tc.steps.append("get_contract : client non identifié")
@@ -283,6 +303,10 @@ _TOOLS: dict[str, Callable[..., str]] = {
 # Parameter specifications by tool name, read from the schemas sent to the model.
 _PARAMETERS: dict[str, dict[str, dict]] = {
     schema["function"]["name"]: schema["function"]["parameters"]["properties"]
+    for schema in TOOL_SCHEMAS
+}
+_REQUIRED: dict[str, list[str]] = {
+    schema["function"]["name"]: schema["function"]["parameters"]["required"]
     for schema in TOOL_SCHEMAS
 }
 
