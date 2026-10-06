@@ -13,6 +13,8 @@ documentaire citée, un agent qui prépare un dossier, ou une transmission à un
 via Ollama), recherche BM25 et vecteurs (fastembed, Qdrant), SQLAlchemy (SQLite ou
 PostgreSQL), Streamlit, Docker, GitHub Actions.
 
+![L'écran après une demande de dépannage : la voie suivie et le brouillon de réponse rédigé par un modèle local, avec ses sources](docs/img/dossier.png)
+
 > **Contexte.** Novare Services est une entreprise fictive. Les documents, les clients
 > et le jeu d'évaluation sont inventés pour ce prototype. Aucun utilisateur réel ne l'a
 > testé.
@@ -39,6 +41,10 @@ Trois principes structurent l'ensemble :
   alors les passages tels quels et l'agent suit un plan fixe. Avec un modèle, hébergé ou
   local, celui-ci rédige sous les mêmes contrôles ; s'il échoue, la voie sans modèle
   reprend la main.
+
+Sous le brouillon, la proposition de ticket attend la décision d'un gestionnaire :
+
+![La proposition de ticket de l'agent et le formulaire de validation : nom du valideur, priorité à confirmer, motif de refus](docs/img/validation.png)
 
 Le parcours d'une demande ([docs/03-architecture.md](docs/03-architecture.md)) :
 
@@ -131,7 +137,7 @@ ouverts exécutés localement sur une carte graphique grand public (Qwen 3.5, à
 | Document attendu parmi les 4 sources | 100 % | 98,6 % | 100 % |
 | Rang du document attendu (MRR, 1 = toujours premier) | 0,89 | 0,86 | 0,89 |
 | Document attendu cité, sur les demandes à répondre | 89,9 % | 88,4 % | 100 % |
-| Faits attendus présents dans la réponse | 87,1 % | 87,1 % | 87,1 % |
+| Faits attendus présents dans la réponse | 87,1 % | 87,1 % | 88,6 % |
 | Réponse jugée fidèle aux sources par un second modèle | — | — | 98,6 % (69 sur 70) |
 | Document d'un autre client atteint | 0 | 0 | 0 |
 
@@ -148,11 +154,11 @@ Pour lire ces chiffres :
   périmètre du jeu sont dans ce cas. Ces limites sont des cas du jeu, pas des oublis.
 - **Avec un modèle, la réponse cite le bon document, et peut omettre un fait.** Le
   modèle lit les quatre sources et répond à la question posée : 9 cas en échec sans
-  lui réussissent, 9 autres échouent, le plus souvent pour un fait attendu absent de
-  sa formulation. Au total 20 cas en échec, autant que sans modèle, mais pas les mêmes.
-- **L'agent conduit par le modèle aboutit dans 15 à 17 dossiers sur 18**, selon
-  l'exécution. Dans les autres, le plan fixe prend le relais et le dossier reçoit quand
-  même sa proposition de ticket.
+  lui réussissent, 8 autres échouent, le plus souvent pour un fait attendu absent de
+  sa formulation. Au total 19 ou 20 cas en échec selon l'exécution, contre 20 sans modèle.
+- **L'agent conduit par le modèle aboutit dans 12 à 14 dossiers sur 18**, selon l'exécution.
+  Dans les autres, le plan fixe prend le relais et le dossier reçoit quand même sa
+  proposition de ticket.
 - **Ces chiffres valent pour une famille de modèles.** Le juge de fidélité en fait partie
   et n'a pas été comparé à un jugement humain. Deux exécutions identiques ne donnent pas
   exactement les mêmes réponses, même à température 0.
@@ -162,7 +168,7 @@ Détail, méthode, cas en échec et limites : [docs/05-evaluation.md](docs/05-ev
 Linux / macOS :
 
 ```bash
-make test          # 1 346 tests, hors ligne
+make test          # 1 354 tests, hors ligne
 make eval          # évaluation BM25 sans LLM, avec seuils de non-régression (celle de la CI)
 make eval-hybrid   # la même avec le modèle d'embeddings
 make eval-llm      # la même avec les modèles locaux (Ollama), réponses rédigées et jugées
@@ -216,7 +222,7 @@ Prototype personnel, développé avec Claude Code comme assistant de programmati
 passé par une revue indépendante dont les constats ont été corrigés ou inscrits comme
 limites dans l'évaluation. Les appels à un modèle, d'abord testés avec un modèle simulé,
 ont ensuite été exécutés pour de bon avec des modèles locaux : cette première exécution
-a révélé deux défauts, corrigés depuis ([docs/05-evaluation.md](docs/05-evaluation.md)).
+a révélé trois défauts, corrigés depuis ([docs/05-evaluation.md](docs/05-evaluation.md)).
 Les règles, l'architecture et les arbitrages sont décrits dans `docs/` ; les chiffres de
 ce README sont reproduits par les commandes ci-dessus.
 

@@ -94,10 +94,10 @@ raisonnement désactivé, contexte de 16 384 tokens. Rapport :
 |---|---|---|
 | Voie finale | 0,904 / 0,882 / 0,941 | 0,919 / 0,906 / 0,941 |
 | Document attendu cité (69 demandes à répondre) | 0,899 / 0,867 / 0,958 | 1,00 / 1,00 / 1,00 |
-| Faits attendus dans la réponse (70 cas) | 0,871 / 0,864 / 0,885 | 0,871 / 0,841 / 0,923 |
+| Faits attendus dans la réponse (70 cas) | 0,871 / 0,864 / 0,885 | 0,886 / 0,886 / 0,885 |
 | Réponse jugée fidèle aux sources (70 réponses jugées) | — | 0,986 / 1,00 / 0,955 |
 | Documents interdits atteints, faits interdits dans la réponse | 0 | 0 |
-| Cas en échec | 20 | 20 |
+| Cas en échec | 20 | 19 |
 
 Le tri et la recherche ne dépendent pas du modèle : leurs lignes sont celles du tableau
 précédent.
@@ -106,35 +106,35 @@ précédent.
 répondre, là où le mode extraits en manquait 7 sur 69 : au lieu de retenir les phrases qui
 partagent le plus de mots avec la question, il lit les quatre sources et répond à la
 question posée. 9 cas en échec sans modèle réussissent (G-079, G-080, G-082, G-120, G-127,
-G-128, G-129, G-130, G-134). En sens inverse, 9 cas qui réussissaient échouent (G-024,
-G-025, G-033, G-037, G-044, G-055, G-069, G-104, G-113), le plus souvent parce qu'un fait
-attendu manque dans sa formulation.
+G-128, G-129, G-130, G-134). En sens inverse, 8 cas qui réussissaient échouent (G-024,
+G-025, G-034, G-037, G-055, G-069, G-104, G-113), le plus souvent parce qu'un fait attendu
+manque dans sa formulation.
 
-**L'agent conduit par le modèle aboutit dans 15 à 17 dossiers sur 18**, selon l'exécution.
-Dans les autres il n'a pas rendu de réponse finale dans les six tours autorisés ; le plan
-fixe prend le relais et le dossier reçoit quand même sa proposition de ticket.
+**L'agent conduit par le modèle aboutit dans 12 à 14 dossiers sur 18**, selon l'exécution.
+Dans les autres, il n'a pas rendu de réponse finale dans les six tours autorisés, ou son
+brouillon annonçait une proposition qu'il n'avait pas faite ; le plan fixe prend le
+relais et le dossier reçoit quand même sa proposition de ticket.
 
 **Hors périmètre.** Quand les sources ne répondent pas à la question, le modèle le dit
 et la demande est transmise (6 cas). Il répond encore à 6 questions hors périmètre qui
 partagent du vocabulaire avec un document.
 
-**Temps de réponse.** 1,1 seconde pour une question documentaire, 18 secondes pour un
+**Temps de réponse.** 1,1 seconde pour une question documentaire, 19 secondes pour un
 dossier (médianes, sur cette machine). Sans modèle : quelques dizaines de millisecondes.
 
 **D'une exécution à l'autre.** Deux exécutions identiques ne donnent pas exactement les
-mêmes réponses, même à température 0 : les mêmes 20 cas échouent dans les deux, et l'agent
-a conclu seul 15 dossiers dans la première, 17 dans la seconde. Le rapport déposé est
-celui de la seconde.
+mêmes réponses, même à température 0 : 19 cas en échec pour l'une et 20 pour l'autre
+(G-033, G-034, G-044 diffèrent), et l'agent a conclu seul 14 dossiers dans la première, 12
+dans la seconde. Le rapport déposé est celui de la seconde.
 
-Les 20 cas en échec avec le modèle :
+Les 19 cas en échec avec le modèle :
 
 | Cas | Demande | Contrôle en échec |
 |---|---|---|
 | G-024 (dev) | « La chaudière de l'immeuble est en panne depuis ce matin, merci d'envoyer un technicien. » | faits absents de la réponse : ['8 h ouvrees', 'priorite p2'] |
 | G-025 (dev) | « Fuite d'eau importante sur le réseau de chauffage du bloc technique, intervention urgente de… » | faits absents de la réponse : ['24 h/24'] |
-| G-033 (dev) | « Notre pompe à chaleur ne marche plus depuis hier soir. » | faits absents de la réponse : ['client non identifie'] |
+| G-034 (test) | « Chaudière en panne sur le site du client C-27, les blocs opératoires ne sont plus chauffés. » | faits absents de la réponse : ['client non identifie'] |
 | G-037 (dev) | « Quel est le délai d'intervention P2 pour la formule Confort ? » | faits absents de la réponse : ['8 h ouvrees'] |
-| G-044 (dev) | « Le forfait diagnostic est-il déduit du devis s'il est accepté ? » | faits absents de la réponse : ['120 ?€'] |
 | G-055 (dev) | « Le contrat de maintenance est-il renouvelé par tacite reconduction ? » | faits absents de la réponse : ['sans tacite reconduction'] |
 | G-069 (test) | « L'astreinte du week-end est-elle incluse dans notre contrat ? » | faits absents de la réponse : ['astreinte incluse 24 h/24'] |
 | G-078 (dev) | « Combien coûte la venue d'un technicien un samedi ? » | faits absents de la réponse : ['211,95'] |
@@ -153,7 +153,7 @@ Les 20 cas en échec avec le modèle :
 
 ### Ce que la première exécution réelle a trouvé
 
-Deux défauts que les tests, faits avec un modèle simulé, ne pouvaient pas montrer :
+Trois défauts que les tests, faits avec un modèle simulé, ne pouvaient pas montrer :
 
 1. **Un outil sans argument faisait échouer la requête.** Quand Qwen 3.5 appelle
    `get_contract`, qui ne prenait aucun argument, il écrit un appel mal formé et le
@@ -164,6 +164,11 @@ Deux défauts que les tests, faits avec un modèle simulé, ne pouvaient pas mon
    activé, qui est le réglage par défaut du serveur pour ce modèle, la réponse
    documentaire, limitée à 600 tokens, revenait tronquée et le garde-fou la remplaçait
    par des extraits.
+3. **Un brouillon annonçait une proposition qui n'existait pas.** Dans quatre dossiers
+   sur dix-huit, le modèle écrivait au client qu'une intervention était proposée et en
+   attente de validation, sans avoir appelé `propose_ticket` : le gestionnaire aurait
+   attendu une proposition jamais enregistrée. Un tel brouillon n'est plus retenu, et le
+   plan fixe, qui propose le ticket, prend le relais.
 
 Et une marge trop faible : la fenêtre de contexte par défaut du serveur est de
 4 096 tokens, réponse comprise, quand l'historique d'un dossier atteint 3 000 tokens au
@@ -179,8 +184,8 @@ Le raisonnement et le contexte se règlent sans code propre à un fournisseur :
   jugement humain.
 - Les fournisseurs hébergés (Mistral, Anthropic) passent par le même code et n'ont pas
   été appelés.
-- Le jeu de cas a été écrit pour le mode sans modèle : il ne contient ni conversation à
-  plusieurs tours ni question qui demande de rapprocher plusieurs documents.
+- Le jeu de cas a été écrit pour le mode sans modèle : des demandes en un seul message,
+  dont la réponse tient le plus souvent dans un document.
 
 ## Cas en échec
 

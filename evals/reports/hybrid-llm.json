@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-06T16:44:54+02:00",
+  "generated_at": "2026-10-06T17:19:29+02:00",
   "config": {
     "split": "all",
     "retrieval_mode": "hybrid",
@@ -22,14 +22,14 @@
       "retrieval_hit_rate": 1.0,
       "retrieval_mrr": 0.8889,
       "citation_hit_rate": 1.0,
-      "fact_accuracy": 0.8714,
+      "fact_accuracy": 0.8857,
       "pii_accuracy": 1.0,
       "forbidden_doc_violations": 0,
       "forbidden_fact_violations": 0,
       "faithfulness": 0.9857,
       "judged_answers": 70,
-      "latency_ms_mean": 3242,
-      "latency_ms_p95": 19477,
+      "latency_ms_mean": 3032,
+      "latency_ms_p95": 18633,
       "cost_eur_total": 0.0,
       "cost_eur_mean": 0.0,
       "routing_confusion": {
@@ -56,14 +56,14 @@
       "retrieval_hit_rate": 1.0,
       "retrieval_mrr": 0.9204,
       "citation_hit_rate": 1.0,
-      "fact_accuracy": 0.8409,
+      "fact_accuracy": 0.8864,
       "pii_accuracy": 1.0,
       "forbidden_doc_violations": 0,
       "forbidden_fact_violations": 0,
       "faithfulness": 1.0,
       "judged_answers": 48,
-      "latency_ms_mean": 3089,
-      "latency_ms_p95": 17926,
+      "latency_ms_mean": 2751,
+      "latency_ms_p95": 16488,
       "cost_eur_total": 0.0,
       "cost_eur_mean": 0.0,
       "routing_confusion": {
@@ -88,14 +88,14 @@
       "retrieval_hit_rate": 1.0,
       "retrieval_mrr": 0.8299,
       "citation_hit_rate": 1.0,
-      "fact_accuracy": 0.9231,
+      "fact_accuracy": 0.8846,
       "pii_accuracy": 1.0,
       "forbidden_doc_violations": 0,
       "forbidden_fact_violations": 0,
       "faithfulness": 0.9545,
       "judged_answers": 22,
-      "latency_ms_mean": 3498,
-      "latency_ms_p95": 19804,
+      "latency_ms_mean": 3501,
+      "latency_ms_p95": 20503,
       "cost_eur_total": 0.0,
       "cost_eur_mean": 0.0,
       "routing_confusion": {
@@ -139,8 +139,8 @@
       ]
     },
     {
-      "id": "G-033",
-      "split": "dev",
+      "id": "G-034",
+      "split": "test",
       "category": "agent",
       "reasons": [
         "faits absents de la réponse : ['client non identifie']"
@@ -152,14 +152,6 @@
       "category": "rag",
       "reasons": [
         "faits absents de la réponse : ['8 h ouvrees']"
-      ]
-    },
-    {
-      "id": "G-044",
-      "split": "dev",
-      "category": "rag",
-      "reasons": [
-        "faits absents de la réponse : ['120 ?€']"
       ]
     },
     {
@@ -295,7 +287,7 @@
       "route": "automation",
       "final_route": "automation",
       "mode": "rule",
-      "latency_ms": 18,
+      "latency_ms": 9,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -355,7 +347,7 @@
       "route": "automation",
       "final_route": "automation",
       "mode": "rule",
-      "latency_ms": 3,
+      "latency_ms": 4,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -395,7 +387,7 @@
       "route": "automation",
       "final_route": "automation",
       "mode": "rule",
-      "latency_ms": 3,
+      "latency_ms": 4,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -455,7 +447,7 @@
       "route": "automation",
       "final_route": "automation",
       "mode": "rule",
-      "latency_ms": 5,
+      "latency_ms": 4,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -741,7 +733,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 33245,
+      "latency_ms": 29392,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -765,7 +757,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 16447,
+      "latency_ms": 16254,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -788,8 +780,8 @@
       "expected_route": "agent",
       "route": "agent",
       "final_route": "agent",
-      "mode": "llm",
-      "latency_ms": 17886,
+      "mode": "deterministic",
+      "latency_ms": 16535,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -811,7 +803,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 22865,
+      "latency_ms": 21138,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -832,7 +824,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 16663,
+      "latency_ms": 25478,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -853,7 +845,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 18383,
+      "latency_ms": 15153,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -874,8 +866,8 @@
       "expected_route": "agent",
       "route": "agent",
       "final_route": "agent",
-      "mode": "deterministic",
-      "latency_ms": 14682,
+      "mode": "llm",
+      "latency_ms": 18633,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -895,8 +887,8 @@
       "expected_route": "agent",
       "route": "agent",
       "final_route": "agent",
-      "mode": "llm",
-      "latency_ms": 9398,
+      "mode": "deterministic",
+      "latency_ms": 13686,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -917,7 +909,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 19550,
+      "latency_ms": 21637,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -937,20 +929,18 @@
       "expected_route": "agent",
       "route": "agent",
       "final_route": "agent",
-      "mode": "llm",
-      "latency_ms": 19477,
+      "mode": "deterministic",
+      "latency_ms": 5270,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
         "final_route": true,
         "pii": true,
-        "facts": false
+        "facts": true
       },
       "reciprocal_rank": null,
       "faithful": null,
-      "failures": [
-        "faits absents de la réponse : ['client non identifie']"
-      ]
+      "failures": []
     },
     {
       "id": "G-034",
@@ -960,7 +950,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 19804,
+      "latency_ms": 20503,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -969,11 +959,13 @@
         "retrieval": true,
         "citation": true,
         "forbidden_docs": true,
-        "facts": true
+        "facts": false
       },
       "reciprocal_rank": 0.25,
       "faithful": null,
-      "failures": []
+      "failures": [
+        "faits absents de la réponse : ['client non identifie']"
+      ]
     },
     {
       "id": "G-035",
@@ -982,8 +974,8 @@
       "expected_route": "agent",
       "route": "agent",
       "final_route": "agent",
-      "mode": "llm",
-      "latency_ms": 17721,
+      "mode": "deterministic",
+      "latency_ms": 21728,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1003,8 +995,8 @@
       "expected_route": "agent",
       "route": "agent",
       "final_route": "agent",
-      "mode": "llm",
-      "latency_ms": 19880,
+      "mode": "deterministic",
+      "latency_ms": 15442,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1025,7 +1017,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 14224,
+      "latency_ms": 3575,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1049,7 +1041,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1379,
+      "latency_ms": 1349,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1071,7 +1063,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1164,
+      "latency_ms": 1106,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1093,7 +1085,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 962,
+      "latency_ms": 957,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1115,7 +1107,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 841,
+      "latency_ms": 817,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1137,7 +1129,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1141,
+      "latency_ms": 1349,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1159,7 +1151,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1780,
+      "latency_ms": 1736,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1181,7 +1173,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 779,
+      "latency_ms": 1346,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1189,13 +1181,11 @@
         "pii": true,
         "retrieval": true,
         "citation": true,
-        "facts": false
+        "facts": true
       },
       "reciprocal_rank": 1.0,
       "faithful": true,
-      "failures": [
-        "faits absents de la réponse : ['120 ?€']"
-      ]
+      "failures": []
     },
     {
       "id": "G-045",
@@ -1205,7 +1195,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 953,
+      "latency_ms": 991,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1227,7 +1217,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1006,
+      "latency_ms": 1001,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1249,7 +1239,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 955,
+      "latency_ms": 990,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1271,7 +1261,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 804,
+      "latency_ms": 869,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1293,7 +1283,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1137,
+      "latency_ms": 988,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1315,7 +1305,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1200,
+      "latency_ms": 1183,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1337,7 +1327,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1263,
+      "latency_ms": 980,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1359,7 +1349,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1179,
+      "latency_ms": 1118,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1381,7 +1371,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1424,
+      "latency_ms": 1115,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1402,7 +1392,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1265,
+      "latency_ms": 1415,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1423,7 +1413,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1163,
+      "latency_ms": 1205,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1447,7 +1437,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1415,
+      "latency_ms": 1359,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1469,7 +1459,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 908,
+      "latency_ms": 1026,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1491,7 +1481,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1142,
+      "latency_ms": 1207,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1513,7 +1503,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1080,
+      "latency_ms": 1094,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1535,7 +1525,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1439,
+      "latency_ms": 1348,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1557,7 +1547,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 911,
+      "latency_ms": 881,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1579,7 +1569,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 764,
+      "latency_ms": 760,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1601,7 +1591,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 653,
+      "latency_ms": 645,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1623,7 +1613,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 914,
+      "latency_ms": 869,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1645,7 +1635,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1427,
+      "latency_ms": 1383,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1667,7 +1657,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 767,
+      "latency_ms": 656,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1689,7 +1679,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 848,
+      "latency_ms": 817,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1711,7 +1701,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1053,
+      "latency_ms": 1054,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1733,7 +1723,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1089,
+      "latency_ms": 1116,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1757,7 +1747,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1076,
+      "latency_ms": 1056,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1778,7 +1768,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1309,
+      "latency_ms": 1331,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1800,7 +1790,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 946,
+      "latency_ms": 883,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1822,7 +1812,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 917,
+      "latency_ms": 966,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1844,7 +1834,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1108,
+      "latency_ms": 1094,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1866,7 +1856,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1044,
+      "latency_ms": 908,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1888,7 +1878,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1630,
+      "latency_ms": 1460,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1910,7 +1900,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1298,
+      "latency_ms": 1059,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1932,7 +1922,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1666,
+      "latency_ms": 1460,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1956,7 +1946,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 978,
+      "latency_ms": 989,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -1978,7 +1968,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 956,
+      "latency_ms": 954,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2000,7 +1990,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1199,
+      "latency_ms": 1249,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2024,7 +2014,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1026,
+      "latency_ms": 784,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2046,7 +2036,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "none",
-      "latency_ms": 8,
+      "latency_ms": 9,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2065,7 +2055,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "none",
-      "latency_ms": 5,
+      "latency_ms": 6,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2103,7 +2093,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "none",
-      "latency_ms": 7,
+      "latency_ms": 8,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2160,7 +2150,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1344,
+      "latency_ms": 1215,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2202,7 +2192,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 15784,
+      "latency_ms": 16029,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2261,7 +2251,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 3511,
+      "latency_ms": 3395,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2283,7 +2273,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1121,
+      "latency_ms": 1113,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2304,7 +2294,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1366,
+      "latency_ms": 1319,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2325,7 +2315,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1098,
+      "latency_ms": 1107,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2346,7 +2336,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 26886,
+      "latency_ms": 16296,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2367,7 +2357,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "none",
-      "latency_ms": 10,
+      "latency_ms": 6,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2386,7 +2376,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "llm",
-      "latency_ms": 2475,
+      "latency_ms": 2536,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2405,7 +2395,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "llm",
-      "latency_ms": 575,
+      "latency_ms": 420,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2424,7 +2414,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "none",
-      "latency_ms": 7,
+      "latency_ms": 5,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2462,7 +2452,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1242,
+      "latency_ms": 1005,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2502,7 +2492,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "llm",
-      "latency_ms": 478,
+      "latency_ms": 355,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2521,7 +2511,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "llm",
-      "latency_ms": 329,
+      "latency_ms": 273,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2540,7 +2530,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1039,
+      "latency_ms": 1055,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2562,7 +2552,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1277,
+      "latency_ms": 1588,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2584,7 +2574,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1341,
+      "latency_ms": 1273,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2606,7 +2596,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1268,
+      "latency_ms": 1029,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2627,7 +2617,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1359,
+      "latency_ms": 1316,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2705,7 +2695,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 17926,
+      "latency_ms": 16488,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2725,8 +2715,8 @@
       "expected_route": "agent",
       "route": "agent",
       "final_route": "agent",
-      "mode": "llm",
-      "latency_ms": 16755,
+      "mode": "deterministic",
+      "latency_ms": 17932,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2745,7 +2735,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 4534,
+      "latency_ms": 4636,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2785,7 +2775,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1076,
+      "latency_ms": 857,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2806,7 +2796,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1459,
+      "latency_ms": 810,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2827,7 +2817,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1782,
+      "latency_ms": 867,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2848,7 +2838,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1358,
+      "latency_ms": 1224,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2869,7 +2859,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1143,
+      "latency_ms": 1108,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2890,7 +2880,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "llm",
-      "latency_ms": 429,
+      "latency_ms": 328,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2909,7 +2899,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 762,
+      "latency_ms": 943,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2931,7 +2921,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 455,
+      "latency_ms": 575,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2953,7 +2943,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1071,
+      "latency_ms": 1248,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -2975,7 +2965,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1643,
+      "latency_ms": 1391,
       "cost_eur": 0.0,
       "checks": {
         "routing": false,
@@ -2997,7 +2987,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1230,
+      "latency_ms": 1082,
       "cost_eur": 0.0,
       "checks": {
         "routing": false,
@@ -3019,7 +3009,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1274,
+      "latency_ms": 1004,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -3041,7 +3031,7 @@
       "route": "agent",
       "final_route": "agent",
       "mode": "llm",
-      "latency_ms": 11034,
+      "latency_ms": 13110,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -3061,7 +3051,7 @@
       "route": "automation",
       "final_route": "automation",
       "mode": "rule",
-      "latency_ms": 13,
+      "latency_ms": 5,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -3100,7 +3090,7 @@
       "route": "rag",
       "final_route": "human",
       "mode": "llm",
-      "latency_ms": 2513,
+      "latency_ms": 2389,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,
@@ -3119,7 +3109,7 @@
       "route": "rag",
       "final_route": "rag",
       "mode": "llm",
-      "latency_ms": 1689,
+      "latency_ms": 1592,
       "cost_eur": 0.0,
       "checks": {
         "routing": true,

@@ -1,6 +1,6 @@
 # Rapport d'évaluation
 
-- Date : 2026-10-06T16:44:54+02:00
+- Date : 2026-10-06T17:19:29+02:00
 - Recherche : hybrid (sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2)
 - Index : 118 passages, top-k 4, seuil de confiance 0.35
 - Modèles : rag = ollama_chat/qwen3.5:4b, agent = ollama_chat/qwen3.5:9b, judge = ollama_chat/qwen3.5:9b
@@ -13,24 +13,23 @@
 | Document attendu retrouvé (top-k) | 1.0 | 1.0 | 1.0 |
 | MRR | 0.8889 | 0.9204 | 0.8299 |
 | Document attendu cité (demandes à répondre) | 1.0 | 1.0 | 1.0 |
-| Faits attendus dans la réponse | 0.8714 | 0.8409 | 0.9231 |
+| Faits attendus dans la réponse | 0.8857 | 0.8864 | 0.8846 |
 | Données personnelles détectées | 1.0 | 1.0 | 1.0 |
 | Documents interdits atteints | 0 | 0 | 0 |
 | Faits interdits dans la réponse | 0 | 0 | 0 |
 | Fidélité (juge LLM) | 0.9857 | 1.0 | 0.9545 |
-| Latence moyenne (ms, indicatif) | 3242 | 3089 | 3498 |
-| Latence p95 (ms, indicatif) | 19477 | 17926 | 19804 |
+| Latence moyenne (ms, indicatif) | 3032 | 2751 | 3501 |
+| Latence p95 (ms, indicatif) | 18633 | 16488 | 20503 |
 | Coût total (€) | 0.0 | 0.0 | 0.0 |
 
 ## Seuils
 Tous les seuils de `evals/thresholds.json` sont respectés.
 
-## Cas en échec (20)
+## Cas en échec (19)
 - G-024 (dev, agent) : faits absents de la réponse : ['8 h ouvrees', 'priorite p2']
 - G-025 (dev, agent) : faits absents de la réponse : ['24 h/24']
-- G-033 (dev, agent) : faits absents de la réponse : ['client non identifie']
+- G-034 (test, agent) : faits absents de la réponse : ['client non identifie']
 - G-037 (dev, rag) : faits absents de la réponse : ['8 h ouvrees']
-- G-044 (dev, rag) : faits absents de la réponse : ['120 ?€']
 - G-055 (dev, rag) : faits absents de la réponse : ['sans tacite reconduction']
 - G-069 (test, rag) : faits absents de la réponse : ['astreinte incluse 24 h/24']
 - G-078 (dev, rag) : faits absents de la réponse : ['211,95']
