@@ -47,10 +47,10 @@ jobs:
           name: evaluation-report
           path: evals/reports/bm25.*
 
-  # Builds the images and starts the full stack (PostgreSQL, Qdrant). Started by hand
-  # from the Actions tab: it downloads the embedding model and takes several minutes.
+  # Builds the two images and starts the full stack (API, front, PostgreSQL, Qdrant),
+  # then asks it a documentary question and opens a ticket. The first start downloads
+  # the embedding model, about 220 MB.
   docker:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -74,11 +74,26 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"q": "Quelle est la majoration pour un déplacement le week-end ?"}' \
             -o response.json
-          python -c "import json; r = json.load(open('response.json')); assert r['route'] == 'rag' and r['citations'], r"
+          python -c "import json; r = json.load(open('response.json')); assert r['route'] == 'rag' and r['citations'] and r['retrieval_mode'] == 'hybrid', r"
+          curl -fsS -X POST http://127.0.0.1:8000/api/v1/ask \
+            -H "Content-Type: application/json" \
+            -d '{"q": "Je conteste la facture de 120 €, le montant ne correspond pas au devis.", "client_id": "C-12"}' \
+            -o dispute.json
+          python -c "import json; r = json.load(open('dispute.json')); assert r['route'] == 'automation' and r['ticket_id'], r"
+          curl -fsS http://127.0.0.1:8000/api/v1/tickets -o tickets.json
+          python -c "import json; t = json.load(open('tickets.json')); assert [x['kind'] for x in t] == ['litige_standard'], t"
           curl -fsS http://127.0.0.1:8501/_stcore/health
+      # The last lines of each service also go out as annotations: unlike the log of
+      # the job, they can be read on the page of the run without signing in.
       - name: Logs
         if: failure()
-        run: docker compose logs --no-color
+        run: |
+          docker compose ps
+          docker compose logs --no-color --tail 80
+          for service in api frontend db qdrant; do
+            lines=$(docker compose logs --no-color --no-log-prefix --tail 12 "$service" 2>&1 | cut -c1-220 | sed 's/%/%25/g' | sed -z 's/\r//g; s/\n/%0A/g')
+            echo "::error title=$service::$lines"
+          done
       - name: Stop
         if: always()
         run: docker compose down -v
