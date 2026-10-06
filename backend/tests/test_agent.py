@@ -550,6 +550,43 @@ def test_llm_agent_without_proposal_stores_no_action(indexed, fake_llm):
     assert response.citations == []
 
 
+def test_a_draft_that_announces_a_proposal_never_made_is_not_kept(indexed, fake_llm):
+    # What a real model did: it checks the contract, computes the deadline, never calls
+    # propose_ticket, and still writes that an intervention awaits validation.
+    fake_llm(
+        [
+            tool_turn(("call_1", "get_contract", {})),
+            tool_turn(("call_2", "compute_deadline", {"priority": "P1"})),
+            final_turn("Une intervention est proposée et en attente de validation."),
+        ]
+    )
+    response, _ = ask(URGENT, "C-12")
+
+    assert response.mode == "deterministic"
+    assert response.proposed_action is not None, "the fixed plan proposes the ticket"
+    assert len(stored_actions()) == 1
+    assert (
+        "Agent : brouillon qui annonce une proposition jamais enregistrée, "
+        "reprise avec le plan déterministe"
+    ) in response.decision_log
+
+
+@pytest.mark.parametrize(
+    ("draft", "announced"),
+    [
+        ("Une intervention est proposée et en attente de validation.", True),
+        ("Nous avons soumis une proposition d'intervention en priorité P1.", True),
+        ("Un ticket vous est proposé ; un gestionnaire le validera.", True),
+        ("Votre demande est en attente de validation par notre gestionnaire.", True),
+        ("Contrat actif.", False),
+        ("Votre contrat Confort est actif jusqu'au 31/12/2028 [1].", False),
+        ("Nous vous proposons de nous rappeler. Aucune intervention n'est prévue.", False),
+    ],
+)
+def test_reading_whether_a_draft_announces_a_proposal(draft, announced):
+    assert dossier_agent.announces_a_proposal(draft) is announced
+
+
 def test_llm_cost_above_the_budget_is_flagged(indexed, fake_llm, monkeypatch):
     monkeypatch.setenv("MAX_COST_EUR_PER_REQUEST", "0.004")
     reset_settings()

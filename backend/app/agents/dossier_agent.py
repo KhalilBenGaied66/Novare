@@ -10,7 +10,8 @@ is the final draft and the graph ends.
 
 Two planners share one interface: `LLMPlanner` (a model chooses the tool calls) and
 `ScriptedPlanner` (a fixed plan, no LLM), which is used when no LLM is configured and
-as a fallback when the model fails or does not conclude within the step limit.
+as a fallback when the model fails, does not conclude within the step limit, or
+announces in its draft a ticket proposal it never made.
 
 The agent never creates a ticket: a proposal made through `propose_ticket` is stored as
 a pending action that a human approves or rejects (see `app.services.actions`).
@@ -30,7 +31,7 @@ from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.core.prompts import loader
 from app.core.schemas import AskRequest, AskResponse, ProposedAction
-from app.core.text import stem, word_sequence
+from app.core.text import split_sentences, stem, word_sequence
 from app.core.types import LLMResult, ToolCall, TriageDecision
 from app.db import repositories
 from app.db.session import session_scope
@@ -171,6 +172,24 @@ def guess_priority(text: str) -> str:
         if stem(word).startswith(_P1_STEMS) and not negated:
             return "P1"
     return "P2"
+
+
+def announces_a_proposal(draft: str) -> bool:
+    """Whether the draft tells the client that an intervention or a ticket is proposed.
+
+    Read from the wording the system prompt asks for ("une intervention est proposée et
+    en attente de validation") and its variants: a sentence that awaits a validation, or
+    one that puts "proposer" next to an intervention or a ticket.
+    """
+    for sentence in split_sentences(draft):
+        sequence = word_sequence(sentence)
+        if " attente de validation " in f" {sequence} ":
+            return True
+        stems = [stem(word) for word in sequence.split()]
+        proposes = any(item.startswith("propos") for item in stems)
+        if proposes and any(item.startswith(("intervent", "ticket")) for item in stems):
+            return True
+    return False
 
 
 def _sources_line(tc: ToolContext) -> str:
@@ -339,6 +358,12 @@ def _run_llm_planner(ctx: RequestContext, client: Client | None) -> tuple[ToolCo
     failure = f"pas de réponse finale en {max_steps} tour(s)"
     try:
         answer = _run(LLMPlanner(ctx), tc, _initial_messages(tc), max_steps)
+        if answer is not None and tc.proposal is None and announces_a_proposal(answer):
+            # Seen with a real model: the draft tells the client that an intervention
+            # is proposed, when the tool was never called. A handler would wait for a
+            # proposal that does not exist.
+            answer = None
+            failure = "brouillon qui annonce une proposition jamais enregistrée"
     except llm.LLMError as exc:
         failure = f"appel LLM en échec ({exc})"  # the message is the provider error class
     except llm.LLMUnavailable:
