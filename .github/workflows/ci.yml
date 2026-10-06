@@ -68,6 +68,14 @@ jobs:
             sleep 5
           done
           exit 1
+      # The front starts once the API is healthy, and takes a few seconds of its own.
+      - name: Wait for the front
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8501/_stcore/health; then exit 0; fi
+            sleep 2
+          done
+          exit 1
       - name: Smoke test
         run: |
           curl -fsS -X POST http://127.0.0.1:8000/api/v1/ask \
