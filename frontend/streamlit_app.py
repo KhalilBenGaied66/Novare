@@ -112,7 +112,13 @@ def format_percent(share: float | None) -> str:
 
 
 def format_ms(value: int | None) -> str:
-    return MISSING if value is None else f"{value} ms"
+    """Milliseconds, and seconds from one second up: an answer written by a model takes
+    tens of seconds, which no longer fits in a tile when counted in milliseconds."""
+    if value is None:
+        return MISSING
+    if value >= 1000:
+        return f"{format_number(value / 1000, 1)} s"
+    return f"{value} ms"
 
 
 def usage_summary(usage: dict) -> str:

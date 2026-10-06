@@ -443,7 +443,7 @@ def test_llm_usage_and_masked_personal_data_are_displayed(fake_api):
     ) in texts
     assert "Données personnelles masquées avant traitement : EMAIL, TEL." in texts
     metrics = {metric.label: metric.value for metric in app.main.metric}
-    assert metrics == {"Confiance": "72 %", "Latence": "2310 ms", "Coût LLM": "0,0123 €"}
+    assert metrics == {"Confiance": "72 %", "Latence": "2,3 s", "Coût LLM": "0,0123 €"}
 
 
 def test_automation_result_shows_the_ticket_and_no_action_form(fake_api):
@@ -782,3 +782,6 @@ def test_formatting_helpers():
     assert streamlit_app.format_percent(0.1667) == "17 %"
     assert streamlit_app.format_ms(None) == "—"
     assert streamlit_app.format_ms(42) == "42 ms"
+    assert streamlit_app.format_ms(999) == "999 ms"
+    assert streamlit_app.format_ms(1000) == "1,0 s"
+    assert streamlit_app.format_ms(37971) == "38,0 s"
