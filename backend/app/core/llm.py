@@ -84,8 +84,10 @@ def complete(
 
     settings = get_settings()
     model = model_for(task)
-    # No temperature/top_p: current Claude models reject sampling parameters.
+    # No temperature/top_p of our own: current Claude models reject sampling
+    # parameters. What a given model needs beyond the request comes from the settings.
     kwargs: dict[str, Any] = {
+        **settings.llm_extra_params,
         "model": model,
         "messages": messages,
         "timeout": settings.llm_timeout_s,

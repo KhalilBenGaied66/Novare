@@ -46,6 +46,21 @@ def test_explicit_database_url_is_used_as_is(monkeypatch):
     assert get_settings().resolved_database_url == "postgresql+psycopg://app@db:5432/dossierops"
 
 
+def test_extra_llm_parameters_are_a_json_object(monkeypatch):
+    assert get_settings().llm_extra_params == {}
+    monkeypatch.setenv("LLM_EXTRA_PARAMS", '{"num_ctx": 16384, "temperature": 0}')
+    reset_settings()
+    assert get_settings().llm_extra_params == {"num_ctx": 16384, "temperature": 0}
+
+
+@pytest.mark.parametrize("value", ['{"model": "another/model"}', '{"messages": []}', "[1, 2]"])
+def test_extra_llm_parameters_cannot_replace_the_request(monkeypatch, value):
+    monkeypatch.setenv("LLM_EXTRA_PARAMS", value)
+    reset_settings()
+    with pytest.raises(ValidationError):
+        get_settings()
+
+
 def test_settings_are_cached_until_reset(monkeypatch):
     first = get_settings()
     monkeypatch.setenv("TOP_K", "7")

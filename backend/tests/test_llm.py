@@ -230,6 +230,20 @@ def test_timeout_and_retries_come_from_the_settings(provider, monkeypatch):
     assert (fake.sent[0]["timeout"], fake.sent[0]["num_retries"]) == (12.5, 0)
 
 
+def test_extra_parameters_of_the_settings_go_with_every_call(provider, monkeypatch):
+    fake = provider(mock_response=ANSWER)
+    configure(monkeypatch, LLM_EXTRA_PARAMS='{"temperature": 0, "reasoning_effort": "none"}')
+    llm.complete("rag", MESSAGES, max_tokens=600)
+    llm.complete("judge", MESSAGES)
+    assert [(sent["temperature"], sent["reasoning_effort"]) for sent in fake.sent] == [
+        (0, "none"),
+        (0, "none"),
+    ]
+    # They add to the request and leave the rest of it as it was.
+    assert fake.sent[0]["max_tokens"] == 600
+    assert fake.sent[0]["timeout"] == 30.0
+
+
 # --- Mapping of the response -----------------------------------------------
 
 
